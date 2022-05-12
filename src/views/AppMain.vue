@@ -1,7 +1,7 @@
 <template>
     <div>
         <app-header/>
-        <div class="flex flex-col max-w-7xl mx-auto my-5">
+        <div class="flex flex-col max-w-7xl mx-auto py-5">
             <div class="flex flex-col md:flex-row">
             <div class="bg-white rounded-md shadow-md m-3 md:flex-[1_1_70%] py-5 px-3">
                 <ul class="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-6 gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
@@ -42,6 +42,8 @@
 <script>
 
 import AppHeader from '../components/AppHeader.vue';
+import { setDoc, doc, getFirestore} from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 export default {
     name: 'AppMain',
@@ -100,14 +102,11 @@ export default {
     },
 
     created(){
-        if (sessionStorage.getItem("selectedNums") !== null){
-                this.selectedNums=JSON.parse(sessionStorage.getItem("selectedNums"))
-                this.$store.commit('UPDATE_PLAYERNUMS',this.selectedNums)
+                this.selectedNums= this.$store.getters.playerNums
                 if (this.selectedNums.length === 5){
                     this.showBtn = true;
                 } 
                 console.log(this.selectedNums);
-        }
 
     },
     mounted(){
@@ -115,6 +114,21 @@ export default {
             this.$refs.boardNum[num-1].disabled = true;
         })
     },
+
+    beforeDestroy(){
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (user){
+            try {
+                setDoc(doc(getFirestore(), "users", user.uid), {
+                    currentNums: this.$store.getters.playerNums,
+                    drawRunning: this.$store.getters.getDrawInProg,
+                },{ merge: true });
+            } catch (e) {
+                console.error("Error adding document: ", e);
+            }
+        }
+    }
 
 }
 </script>

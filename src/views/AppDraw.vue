@@ -79,6 +79,21 @@ export default {
                             console.log("PETIXES TO NOYMERO: ", drawedNum)
                         }
                         this.drawedNums.push(drawedNum);
+                        this.$store.commit('UPDATE_CURRENTDRAW', this.drawedNums);
+                        const auth = getAuth();
+                        const user = auth.currentUser;
+                        if (user){
+                            console.log("MPHKA EDW MPHKA EDW MPHKA EDW")
+                            try {
+                                setDoc(doc(getFirestore(), "users", user.uid), {
+                                    currentNums: this.$store.getters.playerNums,
+                                    drawRunning: this.$store.getters.getDrawInProg,
+                                    currentDraw: this.drawedNums,
+                                });
+                            } catch (e) {
+                                console.error("Error adding document: ", e);
+                            }
+            }
                         this.checkWinningNums();
                         console.log(this.moneyWon)
                     })
@@ -122,8 +137,6 @@ export default {
                     
                 },{ merge: true });
                 // Sto telos edw mporw na balw ,{ merge: true } (meta apo to }) kai na mhn kanei overwrite
-                this.$store.commit('DELETE_PLAYERNUMS', []);
-                this.$store.commit('UPDATE_CURRENTDRAW', []);
                 } catch (e) {
                 console.error("Error adding document: ", e);
             }
@@ -135,13 +148,6 @@ export default {
         const user = auth.currentUser;
         if (user){
             try {
-                // const docRef = await addDoc(collection(getFirestore(), "users"), {
-                //     first: "Ada",
-                //     last: "Lovelace",
-                //     born: 1815,
-                //     email: user.email
-                // });
-
                 const userdata = await getDoc(doc(getFirestore(), "users", user.uid));
                 console.log(userdata.data().email);
                 if (userdata.data().currentNums){
@@ -173,28 +179,17 @@ export default {
 
     beforeDestroy(){
         console.log("EDDDDDDDDDDDDDDDDDDDDDWWWWWWWWWWWWWWWW",this.drawedNums)
-        this.$store.commit('UPDATE_CURRENTDRAW', this.drawedNums);
         
-                const auth = getAuth();
-        const user = auth.currentUser;
-        if (user){
-            try {
-                // const docRef = await addDoc(collection(getFirestore(), "users"), {
-                //     first: "Ada",
-                //     last: "Lovelace",
-                //     born: 1815,
-                //     email: user.email
-                // });
+        
 
-                setDoc(doc(getFirestore(), "users", user.uid), {
-                    currentNums: this.$store.getters.playerNums,
-                    drawRunning: this.$store.getters.getDrawInProg,
-                    currentDraw: this.drawedNums,
-                },{ merge: true });
-            } catch (e) {
-                console.error("Error adding document: ", e);
-            }
-        }
+        console.log("DRAWD NUMS LENGTH", this.drawedNums.length)
+       
+        
+        return new Promise(resolve => {
+
+            resolve();
+        })
+
         }
 }
 </script>

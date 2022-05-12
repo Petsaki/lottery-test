@@ -55,7 +55,7 @@ const ProtectedDraw = (to,from, next) =>{
   console.log("Protected Draw")
   if (!store.getters.getDrawInProg){
     next({
-      path: '/',
+      path: from.path,
     })
   }else{
     next()

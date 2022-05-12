@@ -6,7 +6,7 @@
             </div>
             <div class="flex justify-between">
                 <button @click.once="saveDraw()" class="bg-orange-500 text-white font-semibold rounded-md px-2 py-1 h-fit whitespace-nowrap">Save to History</button>
-                <router-link to="/"  class="text-blue-600 font-semibold rounded-md px-2 py-1 h-fit whitespace-nowrap">Go back</router-link>
+                <button @click.once="goAtMain()"  class="text-blue-600 font-semibold rounded-md px-2 py-1 h-fit whitespace-nowrap">Go back</button>
             </div>
         </div>
     </div>
@@ -14,7 +14,7 @@
 
 <script>
 
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { addDoc,setDoc,doc, collection, getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 export default {
@@ -44,9 +44,30 @@ export default {
                 console.error("Error adding document: ", e);
             }
         }
-        this.$router.push({ path: '/' })
+            this.goAtMain();
         },
+        goAtMain(){
+            this.$store.commit('DELETE_PLAYERNUMS', []);
+            this.$store.commit('UPDATE_CURRENTDRAW', []);
+            this.$router.push({ path: '/' })
+        }
     },
+    async beforeDestroy(){
+
+            const auth = getAuth();
+            const user = auth.currentUser;
+            if (user){
+                try {
+                    await setDoc(doc(getFirestore(), "users", user.uid), {
+                        currentNums: this.$store.getters.playerNums,
+                        drawRunning: this.$store.getters.getDrawInProg,
+                    },{ merge: true });
+                } catch (e) {
+                    console.error("Error adding document: ", e);
+                }
+            }
+    },
+        
 }
 </script>
 

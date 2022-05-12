@@ -41,7 +41,8 @@ export default {
 
             this.$store.commit('UPDATE_LOGGEDIN', false)
             this.$store.commit('UPDATE_USER', null)
-            sessionStorage.removeItem('selectedNums')
+            this.$store.commit('DELETE_PLAYERNUMS', [])
+            this.$store.commit('UPDATE_CURRENTDRAW', [])
 
             }).catch((error) => {
                 console.log(error)
@@ -55,7 +56,11 @@ export default {
         },
         async goAtDraw(){
             console.log("CLICKED!")
-            this.$store.commit('UPDATE_DRAWINPROG', true)
+
+            if (this.$store.getters.playerNums.length === 5){
+                this.$store.commit('UPDATE_DRAWINPROG', true)
+            
+            
             
 
             const auth = getAuth();
@@ -63,10 +68,9 @@ export default {
             if (user){
                 try {
                     await setDoc(doc(getFirestore(), "users", user.uid), {
-                        email: user.email,
                         currentNums: this.$store.getters.playerNums,
                         drawRunning: this.$store.getters.getDrawInProg,
-                    });
+                    },{ merge: true });
                 // Sto telos edw mporw na balw ,{ merge: true } (meta apo to }) kai na mhn kanei overwrite
                 } catch (e) {
                     console.error("Error adding document: ", e);
@@ -76,6 +80,7 @@ export default {
             if (this.$router.currentRoute.path !== '/liveDraw'){
                 this.$router.push({ path: '/liveDraw' })
             }
+        }
         }
         
     },

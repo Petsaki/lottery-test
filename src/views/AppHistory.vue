@@ -1,24 +1,28 @@
 <template>
     <div>
         <app-header/>
-         <div class="flex flex-col items-center m-7">
+         <div class="flex flex-col items-center p-7">
             <h1 class="text-xl font-bold ">Your History:</h1>
             <ul class="m-5 w-full flex flex-col items-center">
                 <li v-for="(num, index) in selectedNums" :key="index" class="pb-4 max-w-lg w-10/12">
                     <div class="relative">
                         <router-link :to="'/history/' + docsID[index]" tabindex=0 class="relative bg-white p-4 rounded-md shadow-md flex flex-col items-center justify-items-start ">
-                        <p>
-                           <span class="font-semibold">Draw date:</span>  {{drawTime[index].toDate().toUTCString().split(' ').slice(0, 5).join(' ')}}
-                        </p>
-                        <p>
-                           <span class="font-semibold">User's numbers:</span>  {{num}}
-                        </p>
-                        <p>
-                            <span class="font-semibold">Drawed Numbers:</span> {{drawedNums[index]}}
-                        </p>
-                        <p>
-                            <span class="font-semibold">Money won:</span> {{moneyWon[index]}}
-                        </p>
+                        <div class="flex w-full gap-1">
+                           <span class="font-semibold flex-1 flex justify-end items-center">Draw date:</span>
+                           <div class="flex-1">{{drawTime[index].toDate().toUTCString().split(' ').slice(0, 5).join(' ')}}</div>  
+                        </div>
+                        <div class="flex w-full gap-1">
+                           <span class="font-semibold flex-1 flex justify-end items-center">User's numbers:</span> 
+                           <div class="flex-1">{{num ? num.join(', ') : ""}}</div> 
+                        </div>
+                        <div class="flex w-full gap-1">
+                            <span class="font-semibold flex-1 flex justify-end items-center">Drawed Numbers:</span> 
+                            <div class="flex-1">{{drawedNums[index] ? drawedNums[index].join(', ') : ""}}</div>
+                        </div>
+                        <div class="flex w-full gap-1">
+                            <span class="font-semibold flex-1 flex justify-end items-center">Money won:</span>
+                            <div class="flex-1">{{moneyWon[index]}}</div> 
+                        </div>
                         </router-link>
                         <span tabindex=0 class="absolute top-0 right-2  cursor-pointer" @click="removeDrawHistory(index)">&#10005;</span>
                         </div>
