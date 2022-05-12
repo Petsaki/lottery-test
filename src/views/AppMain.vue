@@ -4,9 +4,9 @@
         <div class="flex flex-col max-w-7xl mx-auto py-5">
             <div class="flex flex-col md:flex-row">
             <div class="bg-white rounded-md shadow-md m-3 md:flex-[1_1_70%] py-5 px-3">
-                <ul class="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-6 gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
+                <ul class="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-6 gap-y-6 sm:gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
                     <li v-for="index in 30" :key="index" >
-                    <button @click="choosedNum(index)"  ref="boardNum" class="rounded-full disabled:cursor-default disabled:-translate-y-0 disabled:grayscale bg-gradient-to-br from-yellow-300 to-yellow-500 w-20 sm:w-24 font-bold text-gray-700 aspect-square flex justify-center items-center  cursor-pointer hover:-translate-y-1">{{ index }}</button>
+                    <button @click="choosedNum(index)"  ref="boardNum" class="rounded-full disabled:cursor-default disabled:-translate-y-0 disabled:grayscale bg-gradient-to-br from-yellow-300 to-yellow-500 w-14 sm:w-24 font-bold text-gray-700 aspect-square flex justify-center items-center  cursor-pointer hover:-translate-y-1">{{ index }}</button>
                     </li>
                 </ul>
             </div>
@@ -14,10 +14,10 @@
                 <ul class="grid grid-cols-4 sm:grid-cols-5 md:grid-rows-1 md:grid-cols-1 md:grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
                     <li v-for="num in selectedNums" :key="num"  class="relative flex justify-center items-center">
                         
-                        <button class="rounded-full shadow-sm bg-gradient-to-br from-yellow-300 to-yellow-500 w-20 sm:w-24 font-bold text-gray-700 aspect-square flex justify-center items-center cursor-default">
+                        <button class="rounded-full shadow-sm bg-gradient-to-br from-yellow-300 to-yellow-500 w-14 sm:w-24 font-bold text-gray-700 aspect-square flex justify-center items-center cursor-default">
                             {{ num }}
                         </button>
-                        <span tabindex=0 class="absolute -top-2 -right-2 md:-right-4 cursor-pointer" @click="removeNum(num)">&#10005;</span>
+                        <span tabindex=0 class="absolute -top-2 -right-4 md:-right-4 cursor-pointer" @click="removeNum(num)">&#10005;</span>
                     </li>
                 </ul>
                 

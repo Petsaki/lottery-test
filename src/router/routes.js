@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '../store';
+import { getAuth } from "firebase/auth";
 
 Vue.use(Router)
 
@@ -20,35 +21,16 @@ const ProtectedRoute = (to, from, next) =>{
   console.log("checking the paths")
   console.log(to.path === '/login');
 
-  console.log(!store.getters.getDrawInProg)
   console.log(store.getters.getDrawInProg)
 
-  if (store.getters.getDrawInProg && (to.path === "/" || to.path === "/history") ){
+  if (store.getters.getDrawInProg && to.path !== "/liveDraw"){
     next({
       path: '/liveDraw',
     })
+  }else{
+    next();
   }
-  
-  if (LoggedIn) {
-    if (to.path === '/login' || to.path === '/signUp'){
-      next({
-        path: '/',
-      })
-    }else{
-      next()
-    }
     
-  } else{
-    if (to.path === '/'){
-      next({
-        path: '/login',
-      })
-    }else if (to.path !== '/'){
-      next()
-    }
-    
-
-  }
 }
 
 const ProtectedDraw = (to,from, next) =>{
@@ -76,13 +58,13 @@ const router = new Router({
   mode:"history",
   routes: [
       // beforeEnter does not has access to this.
-      {path:'/', component:AppMain,beforeEnter: ProtectedRoute},
+      {path:'/', component:AppMain,meta: {requiresAuth: true},beforeEnter: ProtectedRoute},
       {path:'/test', component:TestComp},
-      {path:'/login', component:AppLogin,beforeEnter: ProtectedRoute},
-      {path:'/signUp', component:AppSignup,beforeEnter: ProtectedRoute},
-      {path:'/liveDraw', component:AppDraw, beforeEnter: ProtectedDraw},
-      {path:'/history', component:AppHistory, beforeEnter: ProtectedRoute},
-      {path:'/history/:id', component:HistoryDetails, beforeEnter: ProtectedRoute},
+      {path:'/login', component:AppLogin,meta: {requiresAuth: false}},
+      {path:'/signUp', component:AppSignup,meta: {requiresAuth: false}},
+      {path:'/liveDraw', component:AppDraw,meta: {requiresAuth: true}, beforeEnter: ProtectedDraw},
+      {path:'/history', component:AppHistory,meta: {requiresAuth: true}, beforeEnter: ProtectedRoute},
+      {path:'/history/:id', component:HistoryDetails,meta: {requiresAuth: true}, beforeEnter: ProtectedRoute},
       {path:'/*', component:AppNotFound},
   ]
 })
@@ -92,11 +74,22 @@ const router = new Router({
 
 
 
-// router.beforeEach(() => {
-//   store.commit('UPDATE_TOAST',
-//   {show:false, msg:"", type:""}
-//   );
-// })
+router.beforeEach((to,from,next) => {
+  console.log(to.meta.requiresAuth)
+  console.log(!getAuth().currentUser)
+  if (getAuth().currentUser && to.meta.requiresAuth){
+      next();
+  }else if (!getAuth().currentUser && to.meta.requiresAuth){
+    console.log("HYJGDSAKFJSDGKJAHFK")
+    next({path: '/login'})
+  }else if (getAuth().currentUser && !to.meta.requiresAuth && to.meta.requiresAuth !== undefined){
+    next({path: from.path})
+  }else{
+    next()
+  }
+  console.log(`nagigation GLOBAL guard ${to.path} + ${from.path}`)
+  
+})
 
 
 export default router

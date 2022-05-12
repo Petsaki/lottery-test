@@ -1,7 +1,7 @@
 <template>
     <div>
         <app-header/>
-         <div class="flex flex-col  max-w-7xl mx-auto my-5">
+         <div class="flex flex-col  max-w-7xl mx-auto my-5 px-3">
              <router-link to="/history" class="pl-8 mb-5">	
                 &#10094; Go back
             </router-link>
@@ -24,7 +24,7 @@
                     <div class="flex gap-5 mt-5 w-full">
 
                         <div class="flex flex-col items-center flex-1">
-                            <span class="font-semibold mb-3">Drawed Numbers:</span>
+                            <span class="font-semibold mb-3 text-center">Drawed Numbers:</span>
                             <div v-for="num in drawedNums" :key="num" class="flex flex-col mb-3">
                                 <button class="rounded-full disabled:grayscale bg-gradient-to-br from-yellow-300 to-yellow-500 w-20 sm:w-24 font-bold text-gray-700 aspect-square flex justify-center items-center cursor-default">
                                     {{ num }}
@@ -33,7 +33,7 @@
                         </div>
 
                         <div class="flex flex-col items-center flex-1">
-                            <span class="font-semibold mb-3">Your Numbers:</span>
+                            <span class="font-semibold mb-3 text-center">Your Numbers:</span>
                             <div v-for="num in selectedNums" :key="num" class="flex flex-col mb-3">
                                 <button :class="[ drawedNums.includes(num)  ? 'from-green-300 to-green-500': 'from-yellow-300 to-yellow-500' ]" class="rounded-full  bg-gradient-to-br  w-20 sm:w-24 font-bold text-gray-700 aspect-square flex justify-center items-center cursor-default">
                                     {{ num }}
@@ -78,8 +78,8 @@ export default {
                     this.drawedNums = (historyDetails.data().drawNums);
                     this.moneyWon = (historyDetails.data().totalWon);
                     this.drawTime = (historyDetails.data().drawTime.toDate());
-            } catch (e) {
-                console.error("Error adding document: ", e);
+            } catch {
+                this.$router.push({ path: '/history' })
             }
         }
     }

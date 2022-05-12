@@ -1,7 +1,8 @@
 <template>
   <div class="relative">
       <app-header/>
-      <div class="bg-white rounded-md shadow-md py-5 px-5 md:px-24 flex flex-row justify-between  max-w-7xl mx-auto my-5">
+      <div class="flex flex-col max-w-7xl w-11/12 mx-auto "> 
+      <div class="bg-white rounded-md shadow-md py-5 px-3  md:px-24 flex flex-row justify-between   my-5">
             <div class="flex gap-2 flex-col"> 
                 <span class="mb-2 font-semibold text-lg">Drawed Number:</span>
                 <ul class="grid grid-rows-1 grid-cols-1 grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
@@ -27,6 +28,8 @@
             </div>
                 
         </div>
+      </div>
+
     <app-modal v-if="showModal" :moneyWon="this.moneyWon" :drawTime="this.currentTime"/>
   </div>
 </template>
@@ -60,14 +63,17 @@ export default {
             this.drawedDiv=""
 
             const delay = () => new Promise(resolve => {
-                setTimeout(resolve, "500")});
+                setTimeout(resolve, "4000")});
 
                 const numsToDraw = this.drawedNums.length ? 5 - this.drawedNums.length : 5;
                 console.log(numsToDraw);
 
                 for (let i = 0; i < numsToDraw; i++) {
-                    await delay()
-                    .then(()=>{
+                        const auth = getAuth();
+                        const user = auth.currentUser;
+                        if (user){
+                            await delay()
+                        .then(()=>{
                         var drawedNum = Math.ceil(Math.random() * (30-1) + 1)
                         while (this.drawedNums.includes(drawedNum)){
                             drawedNum = Math.ceil(Math.random() * (30-1) + 1)
@@ -82,7 +88,7 @@ export default {
                         this.$store.commit('UPDATE_CURRENTDRAW', this.drawedNums);
                         const auth = getAuth();
                         const user = auth.currentUser;
-                        if (user){
+                        
                             console.log("MPHKA EDW MPHKA EDW MPHKA EDW")
                             try {
                                 setDoc(doc(getFirestore(), "users", user.uid), {
@@ -93,22 +99,28 @@ export default {
                             } catch (e) {
                                 console.error("Error adding document: ", e);
                             }
-            }
+
                         this.checkWinningNums();
                         console.log(this.moneyWon)
                     })
+                        }else{
+                            return;
+                        }
+ 
                     console.log(this.drawedNums)
 
                 }
                 console.log("TELEIWSA--------------------------")
-                
-                this.currentTime = new Date();
-                console.log(this.currentTime.toLocaleString())
-                console.log(this.winningNum)
-                this.showModal=true;
-                sessionStorage.removeItem("selectedNums")
-                this.$store.commit('UPDATE_DRAWINPROG',false);
-                this.updateDrawingDB();
+                if (this.drawedNums.length === 5){
+                    this.currentTime = new Date();
+                    console.log(this.currentTime.toLocaleString())
+                    console.log(this.winningNum)
+                    this.showModal=true;
+                    sessionStorage.removeItem("selectedNums")
+                    this.$store.commit('UPDATE_DRAWINPROG',false);
+                    this.updateDrawingDB();
+                }
+
         },
         checkWinningNums(){
             switch(this.winningNum) {
