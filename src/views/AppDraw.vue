@@ -1,6 +1,5 @@
 <template>
-  <div class="relative">
-      <app-header/>
+  <div class="relative" v-if="this.$store.getters.loggedIn">
       <div class="flex flex-col max-w-7xl w-11/12 mx-auto "> 
       <div class="bg-white rounded-md shadow-md py-5 px-3  md:px-24 flex flex-row justify-between   my-5">
             <div class="flex gap-2 flex-col"> 
@@ -19,7 +18,7 @@
                 <ul class="grid grid-rows-1 grid-cols-1 grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
                     <li v-for="num in selectedNums" :key="num"  class="flex justify-center items-center">
                         
-                        <button :ref="'UserNums' + num" class="rounded-full underline underline-offset-1 shadow-sm bg-gradient-to-br from-yellow-300 to-yellow-500 w-20 md:w-24 font-bold text-gray-700 aspect-square flex justify-center items-center cursor-default disabled:from-green-300 disabled:to-green-500 disabled:animate-spin">
+                        <button :ref="'UserNums' + num" class="rounded-full underline decoration-gray-700 shadow-sm bg-gradient-to-br from-yellow-300 to-yellow-500 w-20 md:w-24 font-bold text-gray-700 aspect-square flex justify-center items-center cursor-default disabled:from-green-300 disabled:to-green-500 disabled:animate-spin">
                             {{ num }}
                         </button>
                     </li>
@@ -35,22 +34,21 @@
 </template>
 
 <script>
-import AppHeader from '../components/AppHeader.vue'
 import AppModal from '../components/AppModal.vue'
-import { setDoc, doc, getFirestore, getDoc } from "firebase/firestore";
+import { setDoc, doc, getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { mapGetters } from 'vuex';
 export default {
     name: 'AppDraw',
     components: {
-    'app-header':  AppHeader,
     'app-modal':  AppModal,
     },
     data() {
         return {
-            selectedNums:[],
+            selectedNums:this.watchPlayerNums,
             drawedDiv:"Loading...",
             drawEnded:false,
-            drawedNums:[],
+            drawedNums:this.watchCurrentDraw,
             showModal:false,
             winningNum:0,
             moneyWon:0,
@@ -58,32 +56,64 @@ export default {
 
         }
     },
+    computed: {
+    ...mapGetters(['playerNums','getCurrentDraw'])
+    },
+    watch: {
+        watchPlayerNums() {
+            this.selectedNums = this.playerNums
+            
+        },
+       watchCurrentDraw() {
+            this.drawedNums = this.getCurrentDraw
+        },
+    },
     methods:{
         async startDrawn(){
             this.drawedDiv=""
 
+            console.log("ETREXAAAAAAAAAAAAAAAAAAAAAAA")
+            console.log(this.drawedNums.length)
+            console.log(this.selectedNums.length)
+            if (this.drawedNums.length !== 0){
+                this.drawedNums.forEach( (drawedNum) => {
+                if (this.selectedNums.includes(drawedNum)){
+                    this.winningNum++
+                    console.log(this.$refs["UserNums"+ drawedNum]);
+                    this.$refs["UserNums"+ drawedNum][0].disabled = true;
+                    console.log("PETIXES TO NOYMERO: ", drawedNum)
+                }
+                });
+            }
+
             const delay = () => new Promise(resolve => {
-                setTimeout(resolve, "4000")});
+                setTimeout(resolve, "2000")});
 
                 const numsToDraw = this.drawedNums.length ? 5 - this.drawedNums.length : 5;
                 console.log(numsToDraw);
 
                 for (let i = 0; i < numsToDraw; i++) {
+                    console.log("EDW -3")
                         const auth = getAuth();
                         const user = auth.currentUser;
                         if (user){
+                            console.log("EDW -2")
                             await delay()
                         .then(()=>{
+                            console.log("EDW -1")
                         var drawedNum = Math.ceil(Math.random() * (30-1) + 1)
                         while (this.drawedNums.includes(drawedNum)){
-                            drawedNum = Math.ceil(Math.random() * (30-1) + 1)
+                            drawedNum =Math.ceil(Math.random() * (30-1) + 1)
                         }
-                        if (this.selectedNums.includes(drawedNum)){
+                        console.log("EDW 1")
+                        if (this.selectedNums.includes(drawedNum) && !this.$refs["UserNums"+ drawedNum][0].disabled){
+                            console.log("EDW 2")
                             this.winningNum++
                             console.log(this.$refs["UserNums"+ drawedNum]);
                             this.$refs["UserNums"+ drawedNum][0].disabled = true;
                             console.log("PETIXES TO NOYMERO: ", drawedNum)
                         }
+                        console.log("EDW 3")
                         this.drawedNums.push(drawedNum);
                         this.$store.commit('UPDATE_CURRENTDRAW', this.drawedNums);
                         const auth = getAuth();
@@ -97,13 +127,15 @@ export default {
                                     currentDraw: this.drawedNums,
                                 });
                             } catch (e) {
-                                console.error("Error adding document: ", e);
+                                console.log("Error adding document: ", e);
+                                console.log("or user logged out");
                             }
 
                         this.checkWinningNums();
                         console.log(this.moneyWon)
                     })
                         }else{
+                            console.log("EDW 4")
                             return;
                         }
  
@@ -153,56 +185,16 @@ export default {
                 console.error("Error adding document: ", e);
             }
         }
-        }
+        },
     },
-    async created(){
-        const auth = getAuth();
-        const user = auth.currentUser;
-        if (user){
-            try {
-                const userdata = await getDoc(doc(getFirestore(), "users", user.uid));
-                console.log(userdata.data().email);
-                if (userdata.data().currentNums){
-                    this.selectedNums = userdata.data().currentNums
-                }
-
-                console.log("currentDraw", userdata.data().currentDraw)
-                if (userdata.data().currentDraw){
-                    this.drawedNums = userdata.data().currentDraw
-                }
-            } catch (e) {
-                console.error("Error adding document: ", e);
-            }
-        }
-
-    // if (sessionStorage.getItem("selectedNums") !== null){
-    //         this.selectedNums=JSON.parse(sessionStorage.getItem("selectedNums"))
-    // }else{
-    //     this.$router.push({ path: '/' })
-    // }
-
-    // const numsToDraw = this.drawedNums.length ? 5 - this.drawedNums.length : 5;
-    //Note: i can dodge the timeout if is 0
+    mounted(){
+        this.selectedNums = this.playerNums
+        this.drawedNums = this.getCurrentDraw
     setTimeout(() => {
         this.startDrawn();
-    }, "3000");
+    }, "500");
 
     },
-
-    beforeDestroy(){
-        console.log("EDDDDDDDDDDDDDDDDDDDDDWWWWWWWWWWWWWWWW",this.drawedNums)
-        
-        
-
-        console.log("DRAWD NUMS LENGTH", this.drawedNums.length)
-       
-        
-        return new Promise(resolve => {
-
-            resolve();
-        })
-
-        }
 }
 </script>
 

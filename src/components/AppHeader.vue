@@ -8,19 +8,19 @@
             <ul class="flex gap-7 flex-wrap justify-end">
                 <div class="flex gap-3 justify-center items-center">
                     <li >
-                    <router-link to="/"  class="font-semibold bg-blue-600 rounded-md px-2 py-1 h-fit whitespace-nowrap">Home</router-link>
+                    <router-link to="/"  class="font-semibold bg-blue-600 rounded-md px-2 py-[6px] h-min  whitespace-nowrap">Home</router-link>
                     </li>
                     <li>
-                    <button @click="goAtDraw" class="font-semibold bg-blue-600 rounded-md px-2 py-1 h-fit whitespace-nowrap">Live Draw</button>
+                    <button @click="goAtDraw" class="font-semibold bg-blue-600  rounded-md px-2 py-[6px] h-min whitespace-nowrap text leading-[21px]">Live Draw</button>
                     </li>
                     <li>
-                    <router-link  to="/history" class="font-semibold bg-blue-600 rounded-md px-2 py-1 h-fit">History</router-link>
+                    <router-link  to="/history" class="font-semibold bg-blue-600 rounded-md px-2 py-[6px] h-min ">History</router-link>
                     </li>
                 </div>
                 
                 <div class="flex gap-2 justify-center items-center ">
                     <img alt="User's Image" src="../assets/logo.png" class="w-12 aspect-square rounded-full border-dashed border"/>
-                    <button @click="logout" class="bg-red-600 font-semibold rounded-md px-2 py-1 h-fit whitespace-nowrap">Log Out</button>
+                    <button @click="logout" class="bg-red-600 font-semibold rounded-md px-2 py-[6px] h-min whitespace-nowrap leading-[21px]">Log Out</button>
                 </div>
             </ul>
         </nav>
@@ -29,7 +29,8 @@
 </template>
 
 <script>
-import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+// import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import { setDoc, doc, getFirestore } from "firebase/firestore";
 
 export default {
@@ -41,9 +42,9 @@ export default {
             this.$store.commit('UPDATE_USER', null)
             this.$store.commit('DELETE_PLAYERNUMS', [])
             this.$store.commit('UPDATE_CURRENTDRAW', [])
-            signOut(auth).then(() => {
-
             
+            signOut(auth).then(() => {
+                this.$router.push({ path: '/login' })  
             }).catch((error) => {
                 console.log(error)
             });
@@ -85,20 +86,21 @@ export default {
         }
         
     },
+    
 
     created(){
-        const auth = getAuth();
-        onAuthStateChanged(auth, (user) => {
-            console.log(user);
-        if (user) {
-            this.$store.commit('UPDATE_LOGGEDIN', true)
-            this.$store.commit('UPDATE_USER', user.email)
-        } else {
-            this.$store.commit('UPDATE_LOGGEDIN', false)
-            this.$store.commit('UPDATE_USER', null)
-            this.$router.push({ path: '/login' })
-        }
-        });
+        // const auth = getAuth();
+        // onAuthStateChanged(auth, (user) => {
+        //     console.log(user);
+        // if (user) {
+        //     this.$store.commit('UPDATE_LOGGEDIN', true)
+        //     this.$store.commit('UPDATE_USER', user.email)
+        // } else {
+        //     this.$store.commit('UPDATE_LOGGEDIN', false)
+        //     this.$store.commit('UPDATE_USER', null)
+        //     this.$router.push({ path: '/login' })
+        // }
+        // });
 
         
     },

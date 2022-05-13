@@ -1,9 +1,11 @@
 <template>
-    <div>
-        <app-header/>
+    <div v-if="this.$store.getters.loggedIn">
          <div class="flex flex-col items-center p-7">
             <h1 class="text-xl font-bold ">Your History:</h1>
             <ul class="m-5 w-full flex flex-col items-center">
+                <div v-if="emptyHistory">
+                    You don't have previous games at history :/
+                </div>
                 <li v-for="(num, index) in selectedNums" :key="index" class="pb-4 max-w-lg w-10/12">
                     <div class="relative">
                         <router-link :to="'/history/' + docsID[index]" tabindex=0 class="relative bg-white p-4 rounded-md shadow-md flex flex-col items-center justify-items-start ">
@@ -35,15 +37,11 @@
 
 <script>
 
-import AppHeader from '../components/AppHeader.vue';
 import { getFirestore, getDocs, collection, query, orderBy, deleteDoc, doc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 export default {
     name: 'AppHistory',
-    components: {
-    'app-header':  AppHeader,
-    },
     data(){
         return{
             selectedNums:[],
@@ -51,6 +49,7 @@ export default {
             moneyWon:[],
             drawTime: [],
             docsID:[],
+            emptyHistory:false,
         }
     },
     methods:{
@@ -70,7 +69,8 @@ export default {
                     console.error("Error adding document: ", e);
                 }
         }
-        console.log(this.selectedNums)
+        this.selectedNums.length === 0 ? this.emptyHistory = true : this.emptyHistory = false
+        
         }
     },
 
@@ -78,12 +78,11 @@ export default {
         const auth = getAuth();
         const user = auth.currentUser;
         if (user){
+            console.log("Call to firebase")
             try {
                 const q = query(collection(getFirestore(), "users", user.uid,"history"),orderBy("drawTime", "desc"))
                 const userHistory = await getDocs(q);
-                console.log(userHistory.length)
                 userHistory.forEach((doc) => {
-                    console.log(doc.id, " => ", doc.data());
                     this.selectedNums.push(doc.data().playerNums);
                     this.drawedNums.push(doc.data().drawNums);
                     this.moneyWon.push(doc.data().totalWon);
@@ -101,6 +100,8 @@ export default {
             } catch (e) {
                 console.error("Error adding document: ", e);
             }
+            this.selectedNums.length === 0 ? this.emptyHistory = true : this.emptyHistory = false
+            console.log("selectedNums ", this.selectedNums.length == 0)
         }
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen flex justify-center items-center">
+    <div class="min-h-screen flex justify-center items-center" v-if="!this.$store.getters.loggedIn">
         <form @submit.prevent="submit" class="flex flex-col justify-start items-center gap-4 bg-white px-12 border rounded-md border-black pt-12 pb-28">
             <label for="name">Enter your email: </label>
             <input type="email" required autofocus v-model="form.email" class="bg-slate-200 rounded-md"/>
@@ -7,8 +7,9 @@
             <input type="password" required minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" v-model="form.password" class="bg-slate-200 rounded-md"/>
             <label for="name">Confirm password:</label>
             <input type="password" required minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" v-model="form.confirmpass" class="bg-slate-200 rounded-md"/>
-            <div class="flex justify-center w-full"> 
-                <input type="submit" value="Sign up" class="bg-green-400 rounded-md text-white px-2 cursor-pointer">
+            <div class="flex justify-center flex-col gap-4 w-fit"> 
+                <input type="submit" value="Sign up" class="bg-green-400 rounded-md text-white px-2 cursor-pointer text-center">
+                <router-link to="/login" class="text-blue-500 underline decoration-blue-500 color under px-2 cursor-pointer text-center">Log In</router-link>
             </div>
         </form>
   </div>

@@ -25,25 +25,26 @@ export default {
     },
     methods:{
         async saveDraw(){
-            console.log(this.moneyWon)
-            console.log(this.drawTime)
-
             const auth = getAuth();
             const user = auth.currentUser;
             if (user){
+                console.log("Call to firebase")
                 try {
                     await addDoc(collection(getFirestore(),"users", user.uid,"history"), {
                     drawTime: this.drawTime, 
                     drawNums:this.$store.getters.getCurrentDraw,
                     playerNums:this.$store.getters.playerNums,
                     totalWon:this.moneyWon,
-                    
+                            
                 },{ merge: true });
                 // Sto telos edw mporw na balw ,{ merge: true } (meta apo to }) kai na mhn kanei overwrite
                 } catch (e) {
                 console.error("Error adding document: ", e);
             }
         }
+                    this.$store.commit('UPDATE_TOAST',
+              {show:true, msg:"Draw saved to history successfully!", type:"success"}
+              );
             this.goAtMain();
         },
         goAtMain(){
@@ -57,6 +58,7 @@ export default {
             const auth = getAuth();
             const user = auth.currentUser;
             if (user){
+                console.log("Call to firebase")
                 try {
                     await setDoc(doc(getFirestore(), "users", user.uid), {
                         currentNums: this.$store.getters.playerNums,

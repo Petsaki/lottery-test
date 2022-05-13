@@ -1,6 +1,5 @@
-<template>
-    <div>
-        <app-header/>
+<template >
+    <div v-if="this.$store.getters.loggedIn">
         <div class="flex flex-col max-w-7xl mx-auto py-5">
             <div class="flex flex-col md:flex-row">
             <div class="bg-white rounded-md shadow-md m-3 md:flex-[1_1_70%] py-5 px-3">
@@ -41,15 +40,9 @@
 
 <script>
 
-import AppHeader from '../components/AppHeader.vue';
-import { setDoc, doc, getFirestore} from "firebase/firestore";
-import { getAuth } from "firebase/auth";
-
 export default {
     name: 'AppMain',
-    components: {
-    'app-header':  AppHeader,
-    },
+
     data() {
         return {
             selectedNums:[],
@@ -103,32 +96,26 @@ export default {
 
     created(){
                 this.selectedNums= this.$store.getters.playerNums
-                if (this.selectedNums.length === 5){
+                if (this.selectedNums !== null && this.selectedNums.length === 5){
                     this.showBtn = true;
                 } 
                 console.log(this.selectedNums);
 
     },
     mounted(){
-        this.selectedNums.map((num)=>{
-            this.$refs.boardNum[num-1].disabled = true;
-        })
-    },
-
-    beforeDestroy(){
-        const auth = getAuth();
-        const user = auth.currentUser;
-        if (user){
-            try {
-                setDoc(doc(getFirestore(), "users", user.uid), {
-                    currentNums: this.$store.getters.playerNums,
-                    drawRunning: this.$store.getters.getDrawInProg,
-                },{ merge: true });
-            } catch (e) {
-                console.error("Error adding document: ", e);
+        this.$nextTick(function () {
+            if (this.$store.getters.getDrawInProg){
+                this.$router.push({ path: '/liveDraw' })
             }
-        }
-    }
+            if (this.selectedNums){
+                this.selectedNums.map((num)=>{
+                    this.$refs.boardNum[num-1].disabled = true;
+                })
+            } 
+
+        })
+        
+    },
 
 }
 </script>

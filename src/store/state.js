@@ -5,9 +5,9 @@ let syncedUser = {
     },
     userData:{
         data: null,
-        playerNums: null,
+        playerNums: [],
         drawInProg: false,
-        currentDraws:null,
+        currentDraws:[],
     },
     toastData:{
       show:false,

@@ -1,6 +1,5 @@
 <template>
   <div class="hello">
-    <app-header/>
     <h1>{{msg}}</h1>
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
@@ -32,14 +31,9 @@
 </template>
 
 <script>
-import AppHeader from './AppHeader.vue';
 
 export default {
   name: 'HelloWorld',
-  components: {
-    'app-header':  AppHeader,
-    
-  },
   data() {
     return{
       msg:'Welcome to Your Vue.js App'

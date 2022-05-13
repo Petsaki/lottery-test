@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex justify-center items-center">
+  <div class="min-h-screen flex justify-center items-center" v-if="!this.$store.getters.loggedIn">
         <form @submit.prevent="login" class="flex flex-col justify-start items-center gap-4 bg-white px-12 border rounded-md border-black pt-12 pb-28">
             <label for="name">Enter your email: </label>
             <input type="email" required autofocus v-model="form.email" class="bg-slate-200 rounded-md"/>
@@ -45,16 +45,17 @@ export default {
             console.log(user)
             this.$store.commit('UPDATE_LOGGEDIN', true)
             this.$store.commit('UPDATE_USER', user.email)
-            this.$router.push({ path: '/' })
+            if (this.$store.getters.getDrawInProg){
+              this.$router.push({ path: '/liveDraw' })
+            }else{
+              this.$router.push({ path: '/' })
+            }
+            
         })
         .catch((error) => {
             this.$store.commit('UPDATE_TOAST',
-              {show:true, msg:"Failed to logged in.", type:"error"}
+              {show:true, msg:error.message, type:"error"}
               );
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode)
-            console.log(errorMessage)
         });
             }
   },

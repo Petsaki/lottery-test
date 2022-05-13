@@ -27,27 +27,23 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
       try {
           const userdata = await getDoc(doc(getFirestore(), "users", user.uid));
-          if (userdata.data().currentNums){
-            console.log("EDW")
+         
               store.commit('UPDATE_PLAYERNUMS', userdata.data().currentNums);
-          }
+          
 
-          console.log("currentDraw", userdata.data().currentDraw)
-          if (userdata.data().currentDraw){
-            console.log("EDW")
+          
               store.commit('UPDATE_CURRENTDRAW', userdata.data().currentDraw);
-          }
+          
 
-          if (userdata.data().drawRunning){
-            console.log("EDW")
             store.commit('UPDATE_DRAWINPROG', userdata.data().drawRunning);
-          }
       } catch (e) {
           console.error("Error adding document: ", e);
       }
     store.commit('UPDATE_LOGGEDIN',true)
+    store.commit('UPDATE_USER', user.email)
   } else {
     store.commit('UPDATE_LOGGEDIN',false)
+    store.commit('UPDATE_USER', null)
   }
 
   if (!app){
