@@ -1,5 +1,5 @@
 <template>
-    <div v-if="this.$store.getters.loggedIn" class="max-w-7xl mx-auto">
+    <div v-if="this.$store.getters.IS_LOGGEDIN" class="max-w-7xl mx-auto">
          <div class="flex flex-col py-5 px-3">
              <router-link to="/history" class="pl-8 mb-5">	
                 &#10094; Go back
@@ -14,7 +14,7 @@
                         <div class="flex-1"> {{moneyWon !== 0 ? "Won" : "Lost"}}</div> 
 
                         <span class="font-semibold flex-1 flex justify-end items-center">Money won:</span> 
-                        <div class="flex-1"> {{moneyWon}}</div> 
+                        <div class="flex-1"> {{moneyWon > 0 ? moneyWon : '-'}}</div> 
                         
                     <div class="flex gap-5 mt-5 w-full">
 

@@ -25,25 +25,23 @@ let app;
 const auth = getAuth();
 onAuthStateChanged(auth, async (user) => {
   if (user) {
+      store.commit('SET_LOADING',true);
       try {
           const userdata = await getDoc(doc(getFirestore(), "users", user.uid));
-         
-              store.commit('UPDATE_PLAYERNUMS', userdata.data().currentNums);
-          
-
-          
-              store.commit('UPDATE_CURRENTDRAW', userdata.data().currentDraw);
-          
-
-            store.commit('UPDATE_DRAWINPROG', userdata.data().drawRunning);
+          const ud = userdata.data();
+          store.dispatch('SET_USERDATA',
+          {currentNums:ud.currentNums,
+          currentDraw: ud.currentDraw, 
+          drawRunning :ud.drawRunning, 
+          email:user.email});
       } catch (e) {
           console.error("Error adding document: ", e);
+      }finally{
+        store.commit('SET_LOADING',false);
       }
-    store.commit('UPDATE_LOGGEDIN',true)
-    store.commit('UPDATE_USER', user.email)
+
   } else {
-    store.commit('UPDATE_LOGGEDIN',false)
-    store.commit('UPDATE_USER', null)
+    store.dispatch('REMOVE_USERDATA');
   }
 
   if (!app){
@@ -62,3 +60,17 @@ onAuthStateChanged(auth, async (user) => {
 //   router: router,
 //   store: store,
 // }).$mount('#app')
+
+// const auth = getAuth();
+// onAuthStateChanged(auth, (user) => {
+//   if (user){
+//     if (!app){
+//       app=
+//         new Vue({
+//         render: h => h(App),
+//         router: router,
+//         store: store,
+//       }).$mount('#app')
+//     }
+//   }
+// });

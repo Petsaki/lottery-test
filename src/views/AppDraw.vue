@@ -1,8 +1,9 @@
 <template>
-  <div class="relative" v-if="this.$store.getters.loggedIn">
+  <div class="relative" v-if="this.$store.getters.IS_LOGGEDIN">
       <div class="flex flex-col max-w-7xl w-11/12 mx-auto "> 
-      <div class="bg-white rounded-md shadow-md py-5 px-3  md:px-24 flex flex-row justify-between   my-5">
-            <div class="flex gap-2 flex-col"> 
+      <div class="bg-white rounded-md shadow-md py-5 px-3  md:px-24  my-5 flex flex-col">
+          <div class="flex justify-between  ">
+                <div class="flex gap-2 flex-col">
                 <span class="mb-2 font-semibold text-lg">Drawed Number:</span>
                 <ul class="grid grid-rows-1 grid-cols-1 grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
                     <li v-for="num in drawedNums" :key="num" class="flex justify-center items-center">
@@ -23,9 +24,11 @@
                         </button>
                     </li>
                 </ul>
-                <span class="mb-2 font-semibold text-lg">You have won: {{moneyWon}}</span>
-            </div>
                 
+            </div>
+          </div>
+
+                <span class="my-2 font-semibold text-lg flex items-center justify-center">You have won: {{moneyWon}}</span>
         </div>
       </div>
 
@@ -57,15 +60,15 @@ export default {
         }
     },
     computed: {
-    ...mapGetters(['playerNums','getCurrentDraw'])
+    ...mapGetters(['GET_PLAYERNUMS','GET_CURRENTDRAWS'])
     },
     watch: {
         watchPlayerNums() {
-            this.selectedNums = this.playerNums
+            this.selectedNums = this.GET_PLAYERNUMS
             
         },
        watchCurrentDraw() {
-            this.drawedNums = this.getCurrentDraw
+            this.drawedNums = this.GET_CURRENTDRAWS
         },
     },
     methods:{
@@ -115,17 +118,17 @@ export default {
                         }
                         console.log("EDW 3")
                         this.drawedNums.push(drawedNum);
-                        this.$store.commit('UPDATE_CURRENTDRAW', this.drawedNums);
+                        this.$store.commit('ADD_CURRENTDRAW', this.drawedNums);
                         const auth = getAuth();
                         const user = auth.currentUser;
                         
                             console.log("MPHKA EDW MPHKA EDW MPHKA EDW")
                             try {
                                 setDoc(doc(getFirestore(), "users", user.uid), {
-                                    currentNums: this.$store.getters.playerNums,
-                                    drawRunning: this.$store.getters.getDrawInProg,
+                                    currentNums: this.$store.getters.GET_PLAYERNUMS,
+                                    drawRunning: this.$store.getters.GET_DRAWINPROG,
                                     currentDraw: this.drawedNums,
-                                });
+                                },{ merge: true });
                             } catch (e) {
                                 console.log("Error adding document: ", e);
                                 console.log("or user logged out");
@@ -149,7 +152,7 @@ export default {
                     console.log(this.winningNum)
                     this.showModal=true;
                     sessionStorage.removeItem("selectedNums")
-                    this.$store.commit('UPDATE_DRAWINPROG',false);
+                    this.$store.commit('SET_DRAWINPROG',false);
                     this.updateDrawingDB();
                 }
 
@@ -170,12 +173,13 @@ export default {
             }
         },
         async updateDrawingDB(){
+            console.log("KALISPERA, MPHKES EDW")
             const auth = getAuth();
             const user = auth.currentUser;
             if (user){
                 try {
                     await setDoc(doc(getFirestore(), "users", user.uid), {
-                    drawRunning: this.$store.getters.getDrawInProg,
+                    drawRunning: this.$store.getters.GET_DRAWINPROG,
                     currentNums:[],
                     currentDraw:[],
                     
@@ -188,8 +192,8 @@ export default {
         },
     },
     mounted(){
-        this.selectedNums = this.playerNums
-        this.drawedNums = this.getCurrentDraw
+        this.selectedNums = this.GET_PLAYERNUMS
+        this.drawedNums = this.GET_CURRENTDRAWS
     setTimeout(() => {
         this.startDrawn();
     }, "500");

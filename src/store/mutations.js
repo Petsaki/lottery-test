@@ -1,33 +1,42 @@
-export const UPDATE_LOGGEDIN = (state, LoggedIn) => {
-    state.isLoggedIn = LoggedIn;
+export const SET_LOGGEDIN = (state, payload) => {
+    state.userData.loggedIn = payload;
 }
 
-export const UPDATE_USER = (state, email) => {
-    state.user = email
+export const SET_USER = (state, payload) => {
+    state.userData.email = payload
 }
 
-export const UPDATE_PLAYERNUMS = (state, numArray) => {
-    state.userData.playerNums= numArray;
+export const CLEAR_USER = (state, initialize) => {
+    state.userData.email = initialize
 }
 
-export const DELETE_PLAYERNUMS = (state, initialize) => {
-    state.userData.playerNums= initialize;
+export const SET_LOADING = (state, payload) => {
+    state.userData.loading = payload;
 }
 
-export const UPDATE_DRAWINPROG = (state, drawState) => {
-    state.userData.drawInProg = drawState;
+export const ADD_PLAYERNUMS = (state, payload) => {
+    state.userData.playerNums = payload;
 }
 
-export const UPDATE_CURRENTDRAW = (state, payload) => {
+export const CLEAR_PLAYERNUMS = (state, initialize) => {
+    state.userData.playerNums = initialize;
+}
+
+export const SET_DRAWINPROG = (state, payload) => {
+    state.userData.drawInProg = payload;
+}
+
+export const ADD_CURRENTDRAW = (state, payload) => {
     state.userData.currentDraws = payload;
 }
 
-
+export const CLEAR_CURRENTDRAW = (state, initialize) => {
+    state.userData.currentDraws= initialize;
+}
 
 // Toast
-export const UPDATE_TOAST = (state,{show, msg, type}) => {
+export const ADD_TOAST = (state,{show, msg, type}) => {
     state.toastData.show = show;
     state.toastData.msg = msg;
     state.toastData.type = type;
 }
-

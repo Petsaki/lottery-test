@@ -1,5 +1,5 @@
 <template >
-    <div v-if="this.$store.getters.loggedIn">
+    <div v-if="this.$store.getters.IS_LOGGEDIN">
         <div class="flex flex-col max-w-7xl mx-auto py-5">
             <div class="flex flex-col md:flex-row">
             <div class="bg-white rounded-md shadow-md m-3 md:flex-[1_1_70%] py-5 px-3">
@@ -9,7 +9,7 @@
                     </li>
                 </ul>
             </div>
-            <div ref="playerNums" class="md:flex-[1_1_30%] bg-white rounded-md shadow-md m-3 py-5 px-3">
+            <div :class="[selectedNums.length > 0 ? 'block' : 'hidden md:block']" ref="playerNums" class="md:flex-[1_1_30%] bg-white rounded-md shadow-md m-3 py-5 px-3">
                 <ul class="grid grid-cols-4 sm:grid-cols-5 md:grid-rows-1 md:grid-cols-1 md:grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
                     <li v-for="num in selectedNums" :key="num"  class="relative flex justify-center items-center">
                         
@@ -27,14 +27,14 @@
             <div class="md:flex-[1_1_70%]">
                 
             </div>
-            <div ref="playerNums" class="md:flex-[1_1_30%] py-5 px-3 flex justify-center items-center">
+            <div  ref="playerNums" class="md:flex-[1_1_30%] py-5 px-3 flex justify-center items-center">
                 <button  >
-                    <button v-if="showBtn" @click="goAtDraw" class=" bg-green-500 px-2 py-1 rounded-md text-lg font-semibold">Play!</button>
+                    <button v-if="showBtn" @click="goAtDraw" class=" bg-orange-500 text-white px-2 py-1 rounded-md text-lg font-semibold">Play!</button>
                         
                     </button>
             </div>
             </div>
-        </div>
+        </div> 
     </div>
 </template>
 
@@ -53,9 +53,11 @@ export default {
     methods:{
         choosedNum(num){
             // Bug: I think it was some issue with the objects. it wants to make a spread operator or Object.assign
-             this.$store.commit('UPDATE_TOAST',
-                {show:false, msg:"", type:""}
-            ); 
+            this.$store.dispatch('SET_TOAST',{
+                show:false,
+                msg:"",
+                type:""
+            }) 
             console.log("clicked!", num)
              console.log(this.$refs.boardNum[num-1]);
              if (this.selectedNums.includes(num)) return
@@ -67,26 +69,34 @@ export default {
                     this.showBtn = true;
                 } 
                 sessionStorage.setItem('selectedNums', JSON.stringify(this.selectedNums));
-                this.$store.commit('UPDATE_PLAYERNUMS',this.selectedNums)
+                this.$store.commit('ADD_PLAYERNUMS',this.selectedNums)
                 console.log("EDWWWWWWWWWWWW",this.$store.state.userData.playerNums)
                 console.log(this.selectedNums)
                 return;
              }
              console.log("only 5 num pls")
-             this.$store.commit('UPDATE_TOAST',
-                {show:true, msg:"Only 5 numbers you can choose!", type:"warning"}
-            );    
+             setTimeout(() => {
+                this.$store.dispatch('SET_TOAST',{
+                    show:true,
+                    msg:"Only 5 numbers you can choose!",
+                    type:"warning"
+                }) 
+                
+             },100);
+
              
         },
         removeNum(num){
-            this.$store.commit('UPDATE_TOAST',
-                {show:false, msg:"", type:""}
-            );
+            this.$store.dispatch('SET_TOAST',{
+                show:false,
+                msg:"",
+                type:""
+            }) 
             console.log("MPHKA")
             this.showBtn = false;
             this.selectedNums = this.selectedNums.filter(arrayNum => arrayNum !== num);
             sessionStorage.setItem('selectedNums', JSON.stringify(this.selectedNums));
-            this.$store.commit('UPDATE_PLAYERNUMS',this.selectedNums)
+            this.$store.commit('ADD_PLAYERNUMS',this.selectedNums)
             this.$refs.boardNum[num-1].disabled = false;
         },
         goAtDraw(){
@@ -95,7 +105,7 @@ export default {
     },
 
     created(){
-                this.selectedNums= this.$store.getters.playerNums
+                this.selectedNums= this.$store.getters.GET_PLAYERNUMS
                 if (this.selectedNums !== null && this.selectedNums.length === 5){
                     this.showBtn = true;
                 } 
@@ -104,7 +114,7 @@ export default {
     },
     mounted(){
         this.$nextTick(function () {
-            if (this.$store.getters.getDrawInProg){
+            if (this.$store.getters.GET_DRAWINPROG){
                 this.$router.push({ path: '/liveDraw' })
             }
             if (this.selectedNums){

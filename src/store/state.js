@@ -1,19 +1,17 @@
-let syncedUser = {
-    isLoggedIn: false,
-    user: {
-      email: ""
-    },
-    userData:{
-        data: null,
-        playerNums: [],
-        drawInProg: false,
-        currentDraws:[],
-    },
-    toastData:{
-      show:false,
-      msg:null,
-      type:null,
-    }
+let stateData = {
+  userData:{
+    loading: false,
+    loggedIn: false,
+    email: "",
+    playerNums: [],
+    drawInProg: false,
+    currentDraws:[],
+  },
+  toastData:{
+    show:false,
+    msg:null,
+    type:null,
+  }
 }
 
-export const state = Object.assign(syncedUser)
+export const state = Object.assign(stateData)
