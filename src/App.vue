@@ -1,15 +1,12 @@
 <template>
   <div class="min-h-screen bg-[#f5f5f6]">
     <app-header  v-if="this.$store.getters.IS_LOGGEDIN"/>
-    <!-- <img alt="Vue logo" src="./assets/logo.png">
-    <router-link to="/hello">hello</router-link><br>
-    <router-link to="/test">test</router-link>
-    <app-login/> -->
-    <div v-show="GET_LOADING" class="flex justify-center items-center mt-20 ">
-      <div  class="w-10 aspect-square rounded-full bg-transparent  border-4 border-r-blue-400 animate-spin"></div>
+    <div v-show="GET_LOADING" class="flex justify-center items-center pt-20 ">
+      <div  class="app-loading-circle"></div>
     </div>
      
     <router-view v-if="!GET_LOADING"/>
+
     <app-toast v-if="this.GET_TOAST_SHOW" :msg="this.GET_TOAST_MSG" :type="this.GET_TOAST_TYPE"/>
   </div>
 </template>
@@ -24,7 +21,6 @@ import { getAuth } from '@firebase/auth';
 export default {
   name: 'App',
   components: {
-    // 'app-login':  AppLogin,
     'app-toast':  AppToast,
     'app-header':  AppHeader,
   },
@@ -42,7 +38,7 @@ export default {
       "GET_LOADING"
     ]),
     isNotLoginSignUp() {
-    return this.$route.path !== "/login" &&  this.$route.path !== "/signUp";
+      return this.$route.path !== "/login" &&  this.$route.path !== "/signUp";
     }
   },
   created(){
@@ -50,9 +46,7 @@ export default {
     if (user){
       this.$store.commit('SET_LOGGEDIN',true)
     }
-        
   },
-  
 }
 </script>
 
@@ -60,4 +54,31 @@ export default {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .app-btn {
+    @apply font-semibold rounded-md px-2 py-[6px] whitespace-nowrap leading-[21px] text-center cursor-pointer;
+  }
+  .app-loading-circle {
+    @apply w-10 aspect-square rounded-full bg-transparent  border-4 border-r-blue-400 animate-spin;
+  }
+  .app-input {
+    @apply bg-slate-300 rounded-md font-semibold px-1;
+  }
+  .app-ball {
+    @apply flex justify-center items-center rounded-full shadow-md shadow-gray-500/60 shadow-3d text-sm sm:text-lg w-14 sm:w-24 sm:shadow-3d-sm font-bold text-gray-700 aspect-square;
+  }
+  .shadow-3d-sm {
+    background: radial-gradient(circle at 32px 32px, #fde047, #a16207);
+  }
+  .shadow-3d {
+    background: radial-gradient(circle at 18px 18px, #fde047, #a16207);
+  }
+  .shadow-3d-match-sm {
+    background: radial-gradient(circle at 32px 32px, #86efac, #15803d);
+  }
+  .shadow-3d-match {
+    background: radial-gradient(circle at 18px 18px, #86efac, #15803d);
+  }
+}
 </style>

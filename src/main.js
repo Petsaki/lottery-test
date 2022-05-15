@@ -15,7 +15,6 @@ const firebaseConfig = {
   appId: "1:1058827681868:web:04dc809abe2b80182fb4e9"
 };
 
-
 firebase.initializeApp(firebaseConfig);
 
 Vue.config.productionTip = false
@@ -35,11 +34,10 @@ onAuthStateChanged(auth, async (user) => {
           drawRunning :ud.drawRunning, 
           email:user.email});
       } catch (e) {
-          console.error("Error adding document: ", e);
+        console.error("Error adding document: ", e);
       }finally{
         store.commit('SET_LOADING',false);
       }
-
   } else {
     store.dispatch('REMOVE_USERDATA');
   }
@@ -52,25 +50,5 @@ onAuthStateChanged(auth, async (user) => {
       store: store,
     }).$mount('#app')
   }
+
 });
-
-
-// new Vue({
-//   render: h => h(App),
-//   router: router,
-//   store: store,
-// }).$mount('#app')
-
-// const auth = getAuth();
-// onAuthStateChanged(auth, (user) => {
-//   if (user){
-//     if (!app){
-//       app=
-//         new Vue({
-//         render: h => h(App),
-//         router: router,
-//         store: store,
-//       }).$mount('#app')
-//     }
-//   }
-// });

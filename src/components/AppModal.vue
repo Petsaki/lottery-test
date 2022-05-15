@@ -7,12 +7,12 @@
             <div class="flex justify-between flex-wrap">
                 <button
                     @click.once="saveDraw()" 
-                    class="bg-orange-500 text-white font-semibold rounded-md px-2 py-1 h-fit whitespace-nowrap">
+                    class="app-btn bg-orange-500 text-white">
                         Save to History
                 </button>
                 <button
                     @click.once="goAtMain()"
-                    class="text-blue-600 font-semibold rounded-md px-2 py-1 h-fit whitespace-nowrap">
+                    class="app-btn text-blue-600">
                         Go back
                 </button>
             </div>
@@ -48,7 +48,7 @@ export default {
                         playerNums:this.$store.getters.GET_PLAYERNUMS,
                         totalWon:this.moneyWon,         
                     },{ merge: true });
-                    
+
                     this.$store.dispatch('SET_TOAST',{
                         show:true,
                         msg:"Draw saved to history successfully!",
@@ -65,8 +65,7 @@ export default {
             this.$store.commit('CLEAR_CURRENTDRAW', []);
             this.$router.push({ path: '/' })
         }
-    },
-        
+    },    
 }
 </script>
 

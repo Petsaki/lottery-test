@@ -2,37 +2,33 @@
     <div v-if="this.$store.getters.IS_LOGGEDIN">
         <div class="flex flex-col max-w-7xl mx-auto py-5">
             <div class="flex flex-col md:flex-row">
-            <div class="bg-white rounded-md shadow-md m-3 md:flex-[1_1_70%] py-5 px-3">
-                <ul class="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-6 gap-y-6 sm:gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
-                    <li v-for="index in 30" :key="index" >
-                    <button @click="choosedNum(index)"  ref="boardNum" class="rounded-full disabled:cursor-default disabled:-translate-y-0 disabled:grayscale bg-gradient-to-br from-yellow-300 to-yellow-500 w-14 sm:w-24 font-bold text-gray-700 aspect-square flex justify-center items-center  cursor-pointer hover:-translate-y-1">{{ index }}</button>
-                    </li>
-                </ul>
-            </div>
-            <div :class="[selectedNums.length > 0 ? 'block' : 'hidden md:block']" ref="playerNums" class="md:flex-[1_1_30%] bg-white rounded-md shadow-md m-3 py-5 px-3">
-                <ul class="grid grid-cols-4 sm:grid-cols-5 md:grid-rows-1 md:grid-cols-1 md:grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
-                    <li v-for="num in selectedNums" :key="num"  class="relative flex justify-center items-center">
+                <div class="bg-white rounded-md shadow-md m-3 md:flex-[1_1_70%] py-5 px-3">
+                    <ul class="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-6 gap-y-6 sm:gap-y-8 align-middle self-center justify-items-center font-semibold">
+                        <li v-for="index in 30" :key="index" >
+                            <button @click="choosedNum(index)"  ref="boardNum" class="app-ball disabled:cursor-default disabled:grayscale hover:scale-105 disabled:scale-100">{{ index }}</button>
+                        </li>
+                    </ul>
+                </div>
+                <div :class="[selectedNums.length > 0 ? 'block' : 'hidden md:block']" ref="playerNums" class="md:flex-[1_1_30%] bg-white rounded-md shadow-md m-3 py-5 px-3">
+                    <ul class="grid grid-cols-4 sm:grid-cols-5 md:grid-rows-1 md:grid-cols-1 md:grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
+                        <li v-for="num in selectedNums" :key="num"  class="relative flex justify-center items-center">
                         
-                        <button class="rounded-full shadow-sm bg-gradient-to-br from-yellow-300 to-yellow-500 w-14 sm:w-24 font-bold text-gray-700 aspect-square flex justify-center items-center cursor-default">
-                            {{ num }}
-                        </button>
-                        <span tabindex=0 class="absolute -top-2 -right-4 md:-right-4 cursor-pointer" @click="removeNum(num)">&#10005;</span>
-                    </li>
-                </ul>
-                
-            </div>
+                            <button class="app-ball cursor-default">
+                                {{ num }}
+                            </button>
+                            <span tabindex=0 class="absolute -top-2 -right-4 md:-right-4 cursor-pointer" @click="removeNum(num)">&#10005;</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="flex flex-col-reverse md:flex-row">
     
-            <div class="md:flex-[1_1_70%]">
+                <div class="md:flex-[1_1_70%]">
                 
-            </div>
-            <div  ref="playerNums" class="md:flex-[1_1_30%] py-5 px-3 flex justify-center items-center">
-                <button  >
-                    <button v-if="showBtn" @click="goAtDraw" class=" bg-orange-500 text-white px-2 py-1 rounded-md text-lg font-semibold">Play!</button>
-                        
-                    </button>
-            </div>
+                </div>
+                <div  ref="playerNums" class="md:flex-[1_1_30%] py-5 px-3 flex justify-center items-center">
+                    <button v-if="showBtn" @click="goAtDraw" class="app-btn bg-orange-500 text-white">Play!</button>
+                </div>
             </div>
         </div> 
     </div>
@@ -42,12 +38,10 @@
 
 export default {
     name: 'AppMain',
-
     data() {
         return {
             selectedNums:[],
             showBtn: false,
-
         }
     },
     methods:{
@@ -59,32 +53,31 @@ export default {
                 type:""
             }) 
             console.log("clicked!", num)
-             console.log(this.$refs.boardNum[num-1]);
-             if (this.selectedNums.includes(num)) return
-             if (this.selectedNums.length < 5){
-                 this.$refs.boardNum[num-1].disabled = true;
-                 console.log("MPHKA EDWWWW")
+            console.log(this.$refs.boardNum[num-1]);
+            
+            if (this.selectedNums.includes(num)) return
+
+            if (this.selectedNums.length < 5){
+                this.$refs.boardNum[num-1].disabled = true;
+                console.log("MPHKA EDWWWW")
                 this.selectedNums.push(num);
                 if (this.selectedNums.length === 5){
                     this.showBtn = true;
                 } 
-                sessionStorage.setItem('selectedNums', JSON.stringify(this.selectedNums));
                 this.$store.commit('ADD_PLAYERNUMS',this.selectedNums)
                 console.log("EDWWWWWWWWWWWW",this.$store.state.userData.playerNums)
                 console.log(this.selectedNums)
                 return;
-             }
-             console.log("only 5 num pls")
-             setTimeout(() => {
+            }
+            console.log("only 5 num pls")
+            setTimeout(() => {
                 this.$store.dispatch('SET_TOAST',{
                     show:true,
                     msg:"Only 5 numbers you can choose!",
                     type:"warning"
                 }) 
                 
-             },100);
-
-             
+            },100);
         },
         removeNum(num){
             this.$store.dispatch('SET_TOAST',{
@@ -95,7 +88,6 @@ export default {
             console.log("MPHKA")
             this.showBtn = false;
             this.selectedNums = this.selectedNums.filter(arrayNum => arrayNum !== num);
-            sessionStorage.setItem('selectedNums', JSON.stringify(this.selectedNums));
             this.$store.commit('ADD_PLAYERNUMS',this.selectedNums)
             this.$refs.boardNum[num-1].disabled = false;
         },
@@ -103,14 +95,12 @@ export default {
             this.$root.$emit('headerComponent')
         }
     },
-
     created(){
-                this.selectedNums= this.$store.getters.GET_PLAYERNUMS
-                if (this.selectedNums !== null && this.selectedNums.length === 5){
-                    this.showBtn = true;
-                } 
-                console.log(this.selectedNums);
-
+        this.selectedNums= this.$store.getters.GET_PLAYERNUMS
+        if (this.selectedNums !== null && this.selectedNums.length === 5){
+            this.showBtn = true;
+        } 
+        console.log(this.selectedNums);
     },
     mounted(){
         this.$nextTick(function () {
@@ -121,12 +111,9 @@ export default {
                 this.selectedNums.map((num)=>{
                     this.$refs.boardNum[num-1].disabled = true;
                 })
-            } 
-
+            }
         })
-        
     },
-
 }
 </script>
 

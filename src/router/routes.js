@@ -24,16 +24,6 @@ const ProtectedDraw = (to,from, next) =>{
   }else{
     next()
   }
-  // console.log(from)
-  // const playerNums= store.getters.playerNums
-  // console.log(playerNums)
-  // if (playerNums && playerNums.length === 5) {
-  //   next()
-  // } else {
-  //   next({path: from.path,
-  //   // query: { redirect: to.fullPath }
-  // })
-  // }
 }
 
 const router = new Router({

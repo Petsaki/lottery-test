@@ -1,39 +1,35 @@
 <template>
-  <div class="relative" v-if="this.$store.getters.IS_LOGGEDIN">
-      <div class="flex flex-col max-w-7xl w-11/12 mx-auto "> 
-      <div class="bg-white rounded-md shadow-md py-5 px-3  md:px-24  my-5 flex flex-col">
-          <div class="flex justify-between  ">
-                <div class="flex gap-2 flex-col">
-                <span class="mb-2 font-semibold text-lg">Drawed Number:</span>
-                <ul class="grid grid-rows-1 grid-cols-1 grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
-                    <li v-for="num in drawedNums" :key="num" class="flex justify-center items-center">
+    <div class="relative" v-if="this.$store.getters.IS_LOGGEDIN">
+        <div class="flex flex-col max-w-7xl w-11/12 mx-auto "> 
+            <div class="bg-white rounded-md shadow-md py-5 px-3  md:px-24  my-5 flex flex-col">
+                <div class="flex justify-between  ">
+                    <div class="flex gap-2 flex-col">
+                        <span class="mb-2 font-semibold text-lg">Drawed Number:</span>
+                        <ul class="grid grid-rows-1 grid-cols-1 grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
+                            <li v-for="num in drawedNums" :key="num" class="flex justify-center items-center">
+                                <button class="app-ball cursor-default">
+                                    {{ num }}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="flex gap-2 flex-col">
+                        <span class="mb-2 font-semibold text-lg">Your Number:</span>
+                        <ul class="grid grid-rows-1 grid-cols-1 grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
+                            <li v-for="num in selectedNums" :key="num"  class="flex justify-center items-center">
                         
-                        <button class="rounded-full shadow-sm bg-gradient-to-br from-yellow-300 to-yellow-500 w-20 md:w-24 font-bold text-gray-700 aspect-square flex justify-center items-center cursor-default">
-                            {{ num }}
-                        </button>
-                    </li>
-                </ul>
-            </div>
-            <div class="flex gap-2 flex-col">
-                <span class="mb-2 font-semibold text-lg">Your Number:</span>
-                <ul class="grid grid-rows-1 grid-cols-1 grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
-                    <li v-for="num in selectedNums" :key="num"  class="flex justify-center items-center">
-                        
-                        <button :ref="'UserNums' + num" class="rounded-full underline decoration-gray-700 shadow-sm bg-gradient-to-br from-yellow-300 to-yellow-500 w-20 md:w-24 font-bold text-gray-700 aspect-square flex justify-center items-center cursor-default disabled:from-green-300 disabled:to-green-500 disabled:animate-spin">
-                            {{ num }}
-                        </button>
-                    </li>
-                </ul>
-                
-            </div>
-          </div>
-
+                                <button :ref="'UserNums' + num" class="app-ball cursor-default disabled:shadow-3d-match disabled:sm:shadow-3d-match-sm group ">
+                                    <span class="underline decoration-gray-700 group-disabled:animate-spin ">{{ num }}</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
                 <span class="my-2 font-semibold text-lg flex items-center justify-center">You have won: {{moneyWon}}</span>
+            </div>
         </div>
-      </div>
-
-    <app-modal v-if="showModal" :moneyWon="this.moneyWon" :drawTime="this.currentTime"/>
-  </div>
+        <app-modal v-if="showModal" :moneyWon="this.moneyWon" :drawTime="this.currentTime"/>
+    </div>
 </template>
 
 <script>
@@ -41,6 +37,7 @@ import AppModal from '../components/AppModal.vue'
 import { setDoc, doc, getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { mapGetters } from 'vuex';
+
 export default {
     name: 'AppDraw',
     components: {
@@ -56,7 +53,6 @@ export default {
             winningNum:0,
             moneyWon:0,
             currentTime:null,
-
         }
     },
     computed: {
@@ -65,9 +61,8 @@ export default {
     watch: {
         watchPlayerNums() {
             this.selectedNums = this.GET_PLAYERNUMS
-            
         },
-       watchCurrentDraw() {
+        watchCurrentDraw() {
             this.drawedNums = this.GET_CURRENTDRAWS
         },
     },
@@ -80,48 +75,49 @@ export default {
             console.log(this.selectedNums.length)
             if (this.drawedNums.length !== 0){
                 this.drawedNums.forEach( (drawedNum) => {
-                if (this.selectedNums.includes(drawedNum)){
-                    this.winningNum++
-                    console.log(this.$refs["UserNums"+ drawedNum]);
-                    this.$refs["UserNums"+ drawedNum][0].disabled = true;
-                    console.log("PETIXES TO NOYMERO: ", drawedNum)
-                }
+                    if (this.selectedNums.includes(drawedNum)){
+                        this.winningNum++
+                        console.log(this.$refs["UserNums"+ drawedNum]);
+                        this.$refs["UserNums"+ drawedNum][0].disabled = true;
+                        console.log("PETIXES TO NOYMERO: ", drawedNum)
+                    }
                 });
             }
 
             const delay = () => new Promise(resolve => {
-                setTimeout(resolve, "2000")});
+                setTimeout(resolve, "2000")
+            });
 
-                const numsToDraw = this.drawedNums.length ? 5 - this.drawedNums.length : 5;
-                console.log(numsToDraw);
+            const numsToDraw = this.drawedNums.length ? 5 - this.drawedNums.length : 5;
+            console.log(numsToDraw);
 
-                for (let i = 0; i < numsToDraw; i++) {
-                    console.log("EDW -3")
-                        const auth = getAuth();
-                        const user = auth.currentUser;
-                        if (user){
-                            console.log("EDW -2")
-                            await delay()
+            for (let i = 0; i < numsToDraw; i++) {
+                console.log("EDW -3")
+                const auth = getAuth();
+                const user = auth.currentUser;
+                if (user){
+                    console.log("EDW -2")
+                    await delay()
                         .then(()=>{
                             console.log("EDW -1")
-                        var drawedNum = Math.ceil(Math.random() * (30-1) + 1)
-                        while (this.drawedNums.includes(drawedNum)){
-                            drawedNum =Math.ceil(Math.random() * (30-1) + 1)
-                        }
-                        console.log("EDW 1")
-                        if (this.selectedNums.includes(drawedNum) && !this.$refs["UserNums"+ drawedNum][0].disabled){
-                            console.log("EDW 2")
-                            this.winningNum++
-                            console.log(this.$refs["UserNums"+ drawedNum]);
-                            this.$refs["UserNums"+ drawedNum][0].disabled = true;
-                            console.log("PETIXES TO NOYMERO: ", drawedNum)
-                        }
-                        console.log("EDW 3")
-                        this.drawedNums.push(drawedNum);
-                        this.$store.commit('ADD_CURRENTDRAW', this.drawedNums);
-                        const auth = getAuth();
-                        const user = auth.currentUser;
-                        
+                            var drawedNum = Math.ceil(Math.random() * (30-1) + 1)
+                            while (this.drawedNums.includes(drawedNum)){
+                                drawedNum =Math.ceil(Math.random() * (30-1) + 1)
+                            }
+                            console.log("EDW 1")
+                            if (this.selectedNums.includes(drawedNum) && !this.$refs["UserNums"+ drawedNum][0].disabled){
+                                console.log("EDW 2")
+                                this.winningNum++
+                                console.log(this.$refs["UserNums"+ drawedNum]);
+                                this.$refs["UserNums"+ drawedNum][0].disabled = true;
+                                console.log("PETIXES TO NOYMERO: ", drawedNum)
+                            }
+                            console.log("EDW 3")
+                            this.drawedNums.push(drawedNum);
+                            this.$store.commit('ADD_CURRENTDRAW', this.drawedNums);
+                            const auth = getAuth();
+                            const user = auth.currentUser;
+                    
                             console.log("MPHKA EDW MPHKA EDW MPHKA EDW")
                             try {
                                 setDoc(doc(getFirestore(), "users", user.uid), {
@@ -134,28 +130,25 @@ export default {
                                 console.log("or user logged out");
                             }
 
-                        this.checkWinningNums();
-                        console.log(this.moneyWon)
-                    })
-                        }else{
-                            console.log("EDW 4")
-                            return;
-                        }
- 
-                    console.log(this.drawedNums)
-
+                            this.checkWinningNums();
+                            console.log(this.moneyWon)
+                        })
+                }else{
+                    console.log("EDW 4")
+                    return;
                 }
-                console.log("TELEIWSA--------------------------")
-                if (this.drawedNums.length === 5){
-                    this.currentTime = new Date();
-                    console.log(this.currentTime.toLocaleString())
-                    console.log(this.winningNum)
-                    this.showModal=true;
-                    sessionStorage.removeItem("selectedNums")
-                    this.$store.commit('SET_DRAWINPROG',false);
-                    this.updateDrawingDB();
-                }
+                console.log(this.drawedNums)
 
+            }
+            console.log("TELEIWSA--------------------------")
+            if (this.drawedNums.length === 5){
+                this.currentTime = new Date();
+                console.log(this.currentTime.toLocaleString())
+                console.log(this.winningNum)
+                this.showModal=true;
+                this.$store.commit('SET_DRAWINPROG',false);
+                this.updateDrawingDB();
+            }
         },
         checkWinningNums(){
             switch(this.winningNum) {
@@ -179,25 +172,22 @@ export default {
             if (user){
                 try {
                     await setDoc(doc(getFirestore(), "users", user.uid), {
-                    drawRunning: this.$store.getters.GET_DRAWINPROG,
-                    currentNums:[],
-                    currentDraw:[],
-                    
-                },{ merge: true });
-                // Sto telos edw mporw na balw ,{ merge: true } (meta apo to }) kai na mhn kanei overwrite
+                        drawRunning: this.$store.getters.GET_DRAWINPROG,
+                        currentNums:[],
+                        currentDraw:[],
+                    },{ merge: true });
                 } catch (e) {
-                console.error("Error adding document: ", e);
+                    console.error("Error adding document: ", e);
+                }
             }
-        }
         },
     },
     mounted(){
         this.selectedNums = this.GET_PLAYERNUMS
         this.drawedNums = this.GET_CURRENTDRAWS
-    setTimeout(() => {
-        this.startDrawn();
-    }, "500");
-
+        setTimeout(() => {
+            this.startDrawn();
+        }, "500");
     },
 }
 </script>
