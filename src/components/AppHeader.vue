@@ -51,7 +51,6 @@ export default {
             }
         },
         async goAtDraw(){
-            console.log("CLICKED!")
             // Bug: here it has the issue with the redundant navigation
             if (this.$store.getters.GET_PLAYERNUMS.length === 5){
                 this.$store.commit('SET_DRAWINPROG', true)

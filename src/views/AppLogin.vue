@@ -41,10 +41,7 @@ export default {
       })
       const auth = getAuth();
       signInWithEmailAndPassword(auth, this.form.email, this.form.password)
-        .then((userCredential) => {
-
-          const user = userCredential.user;
-          console.log(user)
+        .then(() => {
           if (this.$store.getters.GET_DRAWINPROG){
             this.$router.push({ path: '/liveDraw' })
           }else{

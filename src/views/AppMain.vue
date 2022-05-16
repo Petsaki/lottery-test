@@ -52,24 +52,18 @@ export default {
                 msg:"",
                 type:""
             }) 
-            console.log("clicked!", num)
-            console.log(this.$refs.boardNum[num-1]);
             
             if (this.selectedNums.includes(num)) return
 
             if (this.selectedNums.length < 5){
                 this.$refs.boardNum[num-1].disabled = true;
-                console.log("MPHKA EDWWWW")
                 this.selectedNums.push(num);
                 if (this.selectedNums.length === 5){
                     this.showBtn = true;
                 } 
                 this.$store.commit('ADD_PLAYERNUMS',this.selectedNums)
-                console.log("EDWWWWWWWWWWWW",this.$store.state.userData.playerNums)
-                console.log(this.selectedNums)
                 return;
             }
-            console.log("only 5 num pls")
             setTimeout(() => {
                 this.$store.dispatch('SET_TOAST',{
                     show:true,
@@ -85,7 +79,6 @@ export default {
                 msg:"",
                 type:""
             }) 
-            console.log("MPHKA")
             this.showBtn = false;
             this.selectedNums = this.selectedNums.filter(arrayNum => arrayNum !== num);
             this.$store.commit('ADD_PLAYERNUMS',this.selectedNums)
@@ -100,7 +93,6 @@ export default {
         if (this.selectedNums !== null && this.selectedNums.length === 5){
             this.showBtn = true;
         } 
-        console.log(this.selectedNums);
     },
     mounted(){
         this.$nextTick(function () {

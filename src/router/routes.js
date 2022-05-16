@@ -15,8 +15,6 @@ const HistoryDetails = () => import('../views/HistoryDetails.vue')
 
 
 const ProtectedDraw = (to,from, next) =>{
-  console.log("Protected Draw")
-  console.log("PROTECTED ROUTE: ", !store.getters.GET_DRAWINPROG )
   if (!store.getters.GET_DRAWINPROG){
     next({
       path: from.path,
@@ -49,32 +47,24 @@ const router = new Router({
 
 // beforeEnter does not has access to this.
 router.beforeEach((to,from,next) => {
-  console.log(to.meta.requiresAuth)
-  console.log("Auth",getAuth().currentUser)
 
   if (getAuth().currentUser && store.getters.GET_DRAWINPROG && to.path !== "/liveDraw"){
     next({path: '/liveDraw'})
   }
 
   if (getAuth().currentUser && to.meta.requiresAuth){
-    console.log("1")
     next();
   }else if (to.meta.requiresAuth === undefined){
     next()
   }else if (getAuth().currentUser && (!to.meta.requiresAuth)){
     next({path: from.path})
-    console.log("2")
   }else if (!getAuth().currentUser && to.meta.requiresAuth){
-    console.log("3")
     next({path: '/login'})
   }else if (!getAuth().currentUser && !to.meta.requiresAuth){
-    console.log("4")
     next()
   }else{
-    console.log("5")
     next()
   }
-  console.log(`nagigation GLOBAL guard ${to.path} + ${from.path}`)
 })
 
 export default router

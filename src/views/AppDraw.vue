@@ -69,17 +69,11 @@ export default {
     methods:{
         async startDrawn(){
             this.drawedDiv=""
-
-            console.log("ETREXAAAAAAAAAAAAAAAAAAAAAAA")
-            console.log(this.drawedNums.length)
-            console.log(this.selectedNums.length)
             if (this.drawedNums.length !== 0){
                 this.drawedNums.forEach( (drawedNum) => {
                     if (this.selectedNums.includes(drawedNum)){
                         this.winningNum++
-                        console.log(this.$refs["UserNums"+ drawedNum]);
                         this.$refs["UserNums"+ drawedNum][0].disabled = true;
-                        console.log("PETIXES TO NOYMERO: ", drawedNum)
                     }
                 });
             }
@@ -89,36 +83,26 @@ export default {
             });
 
             const numsToDraw = this.drawedNums.length ? 5 - this.drawedNums.length : 5;
-            console.log(numsToDraw);
 
             for (let i = 0; i < numsToDraw; i++) {
-                console.log("EDW -3")
                 const auth = getAuth();
                 const user = auth.currentUser;
                 if (user){
-                    console.log("EDW -2")
                     await delay()
                         .then(()=>{
-                            console.log("EDW -1")
                             var drawedNum = Math.ceil(Math.random() * (30-1) + 1)
                             while (this.drawedNums.includes(drawedNum)){
                                 drawedNum =Math.ceil(Math.random() * (30-1) + 1)
                             }
-                            console.log("EDW 1")
                             if (this.selectedNums.includes(drawedNum) && !this.$refs["UserNums"+ drawedNum][0].disabled){
-                                console.log("EDW 2")
                                 this.winningNum++
-                                console.log(this.$refs["UserNums"+ drawedNum]);
                                 this.$refs["UserNums"+ drawedNum][0].disabled = true;
-                                console.log("PETIXES TO NOYMERO: ", drawedNum)
                             }
-                            console.log("EDW 3")
                             this.drawedNums.push(drawedNum);
                             this.$store.commit('ADD_CURRENTDRAW', this.drawedNums);
                             const auth = getAuth();
                             const user = auth.currentUser;
                     
-                            console.log("MPHKA EDW MPHKA EDW MPHKA EDW")
                             try {
                                 setDoc(doc(getFirestore(), "users", user.uid), {
                                     currentNums: this.$store.getters.GET_PLAYERNUMS,
@@ -127,24 +111,16 @@ export default {
                                 },{ merge: true });
                             } catch (e) {
                                 console.log("Error adding document: ", e);
-                                console.log("or user logged out");
                             }
 
                             this.checkWinningNums();
-                            console.log(this.moneyWon)
                         })
                 }else{
-                    console.log("EDW 4")
                     return;
                 }
-                console.log(this.drawedNums)
-
             }
-            console.log("TELEIWSA--------------------------")
             if (this.drawedNums.length === 5){
                 this.currentTime = new Date();
-                console.log(this.currentTime.toLocaleString())
-                console.log(this.winningNum)
                 this.showModal=true;
                 this.$store.commit('SET_DRAWINPROG',false);
                 this.updateDrawingDB();
@@ -166,7 +142,6 @@ export default {
             }
         },
         async updateDrawingDB(){
-            console.log("KALISPERA, MPHKES EDW")
             const auth = getAuth();
             const user = auth.currentUser;
             if (user){

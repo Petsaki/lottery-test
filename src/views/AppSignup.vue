@@ -47,7 +47,6 @@ export default {
           .then((userCredential) => {
             // this.$store.commit('SET_LOGGEDIN',true);
             const user = userCredential.user;
-            console.log(user)
             try {
               setDoc(doc(getFirestore(), "users", user.uid), {
                 drawRunning: false,

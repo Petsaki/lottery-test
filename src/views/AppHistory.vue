@@ -84,7 +84,6 @@ export default {
         const user = auth.currentUser;
         if (user){
             this.loading=true;
-            console.log("Call to firebase")
             try {
                 const q = query(collection(getFirestore(), "users", user.uid,"history"),orderBy("drawTime", "desc"))
                 const userHistory = await getDocs(q);
@@ -101,7 +100,6 @@ export default {
                 this.loading=false;
             }
             this.selectedNums.length === 0 ? this.emptyHistory = true : this.emptyHistory = false
-            console.log("selectedNums ", this.selectedNums.length == 0)
         }
     }
 }
