@@ -1,6 +1,6 @@
 <template>
-  <div class="min-h-screen flex justify-center py-20" v-if="!this.$store.getters.IS_LOGGEDIN">
-    <form @submit.prevent="login" class="flex flex-col h-fit justify-start items-center gap-4 bg-white px-12 border-2 rounded-md border-black pt-5 pb-28">
+  <div class="min-h-screen flex justify-center items-center sm:items-start sm:pt-36" v-if="!this.$store.getters.IS_LOGGEDIN">
+    <form @submit.prevent="login" class="flex flex-col h-fit justify-start items-center gap-4 bg-white px-5 sm:px-12 border-2 rounded-md border-black pt-5 pb-8">
         <img alt="Logo Image" src="../assets/logo.png" class="w-24"/>
           <label for="name">Enter your email: </label>
           <input type="email" required autofocus v-model="form.email" class="app-input"/>

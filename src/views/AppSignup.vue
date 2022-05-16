@@ -1,13 +1,17 @@
 <template>
-  <div class="min-h-screen flex justify-center py-20" v-if="!this.$store.getters.IS_LOGGEDIN">
-    <form @submit.prevent="signUp" class="flex flex-col h-fit justify-start items-center gap-4 bg-white px-12  rounded-md border-2 border-black pt-5 pb-28">
+  <div class="min-h-screen flex justify-center items-center sm:items-start sm:pt-36" v-if="!this.$store.getters.IS_LOGGEDIN">
+    <form @submit.prevent="signUp" class="flex flex-col h-fit justify-start items-center gap-4 bg-white px-5 sm:px-12  rounded-md border-2 border-black pt-5 pb-8">
       <img alt="Logo Image" src="../assets/logo.png" class="w-24"/>
       <label for="name">Enter your email: </label>
       <input type="email" required autofocus v-model="form.email" class="app-input"/>
       <label for="name">Enter your password: </label>
-      <input type="password" required minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" v-model="form.password" class="app-input"/>
+      <input type="password" required minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" v-model="form.password"
+        title="Must be 8 length at least and has 1 [A-Z], 1 [a-z], 1 [0-9]."
+        class="app-input"/>
       <label for="name">Confirm password:</label>
-      <input type="password" required minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" v-model="form.confirmpass" class="app-input"/>
+      <input type="password" required minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" v-model="form.confirmpass"
+        title="Must be 8 length at least and has 1 [A-Z], 1 [a-z], 1 [0-9]."
+        class="app-input"/>
       <div class="flex justify-center flex-col gap-4 w-fit"> 
         <input type="submit" value="Sign up" class="app-btn bg-green-400 text-white">
         <router-link to="/login" class="app-btn text-blue-500 underline decoration-blue-500">Log In</router-link>
