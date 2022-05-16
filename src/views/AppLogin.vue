@@ -1,12 +1,16 @@
 <template>
   <div class="min-h-screen flex justify-center items-center sm:items-start sm:pt-36" v-if="!this.$store.getters.IS_LOGGEDIN">
-    <form @submit.prevent="login" class="flex flex-col h-fit justify-start items-center gap-4 bg-white px-5 sm:px-12 border-2 rounded-md border-black pt-5 pb-8">
-        <img alt="Logo Image" src="../assets/logo.png" class="w-24"/>
-          <label for="name">Enter your email: </label>
-          <input type="email" required autofocus v-model="form.email" class="app-input"/>
-          <label for="name">Enter your password: </label>
-          <input type="password" required minlength="8" v-model="form.password" autocomplete="on" class="app-input"/>
-          <div class="flex justify-between w-full text-white"> 
+    <form @submit.prevent="login" class="flex flex-col h-fit justify-start items-center gap-5 bg-white px-5 sm:px-12 border-2 rounded-md border-black pt-5 pb-8">
+        <img alt="Logo Image" src="../assets/logo.png" class="app-img-logo"/>
+          <div class="flex flex-col items-center text-center gap-2">
+            <label for="name">Enter your email: </label>
+            <input type="email" required autofocus v-model="form.email" class="app-input"/>
+          </div>
+          <div class="flex flex-col items-center text-center gap-2">
+            <label for="name">Enter your password: </label>
+            <input type="password" required minlength="8" v-model="form.password" autocomplete="on" class="app-input"/>
+          </div>
+          <div class="flex justify-between w-full text-white pt-3"> 
             <input type="submit" value="Log In" class="app-btn bg-blue-400">
             <router-link to="/signUp" class="app-btn bg-green-400">Sign up</router-link>
           </div>

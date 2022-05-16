@@ -1,8 +1,8 @@
 <template>
     <div class="bg-sky-400 shadow-md ">
         <div class="max-w-7xl mx-auto flex flex-row justify-between items-center py-5 px-2 md:px-4">
-            <div class="self-start w-20 sm:w-24">
-                <img @click="goAtMain" alt="Logo Image" src="../assets/logo.png" class="cursor-pointer"/>
+            <div class="self-start ">
+                <img @click="goAtMain" alt="Logo Image" src="../assets/lottery_logo_2.png" class="app-img-logo"/>
             </div>
             <nav class="text-white">
                 <ul class="flex gap-7 flex-wrap-reverse justify-end">
@@ -18,8 +18,8 @@
                         </li>
                     </div>
                 
-                    <div class="flex gap-2 justify-center items-center ">
-                        <img alt="User's Image" src="../assets/logo.png" class="w-12 aspect-square rounded-full border-dashed border"/>
+                    <div class="flex gap-2 justify-center items-center">
+                        <img alt="User's Image" src="../assets/logo.png" class="w-12 h-12 bg-center object-cover bg-no-repeat rounded-full border-dashed border"/>
                         <button
                             @click="logout"
                             class="app-btn bg-red-600">

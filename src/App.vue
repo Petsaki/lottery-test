@@ -80,5 +80,8 @@ export default {
   .shadow-3d-match {
     background: radial-gradient(circle at 18px 18px, #86efac, #15803d);
   }
+  .app-img-logo {
+    @apply block cursor-pointer object-cover max-h-[96px] max-w-[128px];
+  }
 }
 </style>
