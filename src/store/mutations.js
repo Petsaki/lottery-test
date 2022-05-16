@@ -40,3 +40,18 @@ export const ADD_TOAST = (state,{show, msg, type}) => {
     state.toastData.msg = msg;
     state.toastData.type = type;
 }
+
+// History Details
+export const ADD_HISTORYDETAILS = (state,{selectedNums, drawedNums, moneyWon,drawTime}) => {
+    state.historyDetails.selectedNums = selectedNums
+    state.historyDetails.drawedNums = drawedNums
+    state.historyDetails.moneyWon = moneyWon
+    state.historyDetails.drawTime = drawTime
+}
+
+export const CLEAR_HISTORYDETAILS = (state) => {
+    state.historyDetails.selectedNums = []
+    state.historyDetails.drawedNums = []
+    state.historyDetails.moneyWon = null
+    state.historyDetails.drawTime = null
+}

@@ -17,3 +17,13 @@ export const GET_TOAST_SHOW = state => state.toastData.show
 export const GET_TOAST_MSG = state => state.toastData.msg
 
 export const GET_TOAST_TYPE = state => state.toastData.type
+
+// History Details
+
+export const GET_HISTORY_PLAYERNUMS = state => state.historyDetails.selectedNums
+
+export const GET_HISTORY_DRAWEDNUMS = state => state.historyDetails.drawedNums
+
+export const GET_HISTORY_MONEYWON = state => state.historyDetails.moneyWon
+
+export const GET_HISTORY_DRAWTIME = state => state.historyDetails.drawTime

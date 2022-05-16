@@ -5,6 +5,14 @@ export const SET_TOAST = ({commit},{show, msg, type}) => {
     commit('ADD_TOAST',{show, msg, type})
 }
 
+export const SET_HISTORYDETAILS = ({commit},{selectedNums, drawedNums, moneyWon,drawTime}) => {
+    commit('ADD_HISTORYDETAILS',{selectedNums, drawedNums, moneyWon,drawTime})
+}
+
+export const REMOVE_HISTORYDETAILS = ({commit}) => {
+    commit('CLEAR_HISTORYDETAILS')
+}
+
 export const FETCH_USERDATA = async ({ commit,dispatch }, {user}) => {
     if (user) {
         commit('GET_LOADING',true);

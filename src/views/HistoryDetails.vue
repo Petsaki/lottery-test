@@ -8,7 +8,7 @@
             <div v-show="!loading" class="relative w-full flex flex-col items-center box-border bg-white rounded-md shadow-md">
                 <div class="flex flex-col items-center z-30">
                     <span class="font-semibold flex-1 flex justify-end items-center">Draw date:</span> 
-                    <div class="flex-1"> {{drawTime ? drawTime.toUTCString().split(' ').slice(0, 5).join(' ') : ""}}</div> 
+                    <div class="flex-1"> {{drawTime ? drawTime : ""}}</div> 
 
 
                     <span class="font-semibold flex-1 flex justify-end items-center">Status:</span> 
@@ -54,29 +54,35 @@ export default {
     data(){
         return{
             id: this.$route.params,
-            selectedNums:null,
-            drawedNums:null,
-            moneyWon:null,
-            drawTime: null,
-            loading:true,
+            selectedNums:this.$store.getters.GET_HISTORY_PLAYERNUMS,
+            drawedNums:this.$store.getters.GET_HISTORY_DRAWEDNUMS,
+            moneyWon:this.$store.getters.GET_HISTORY_MONEYWON,
+            drawTime: this.$store.getters.GET_HISTORY_DRAWTIME,
+            loading:false,
         }
     },
     async created(){
-        const auth = getAuth();
-        const user = auth.currentUser;
-        if (user){
-            try {
-                const historyDetails = await getDoc(doc(getFirestore(), "users", user.uid, "history", this.id.id));
-                this.selectedNums = (historyDetails.data().playerNums);
-                this.drawedNums = (historyDetails.data().drawNums);
-                this.moneyWon = (historyDetails.data().totalWon);
-                this.drawTime = (historyDetails.data().drawTime.toDate());
-            } catch {
-                this.$router.push({ path: '/history' })
-            }finally{
-                this.loading= false;
+        if (this.selectedNums.length < 5){
+            const auth = getAuth();
+            const user = auth.currentUser;
+            if (user){
+                console.log("FIREBASE CALL")
+                try {
+                    const historyDetails = await getDoc(doc(getFirestore(), "users", user.uid, "history", this.id.id));
+                    this.selectedNums = (historyDetails.data().playerNums);
+                    this.drawedNums = (historyDetails.data().drawNums);
+                    this.moneyWon = (historyDetails.data().totalWon);
+                    this.drawTime = (historyDetails.data().drawTime.toDate().toUTCString().split(' ').slice(0, 5).join(' '));
+                } catch {
+                    this.$router.push({ path: '/history' })
+                }finally{
+                    this.loading= false;
+                }
             }
         }
+    },
+    beforeDestroy(){
+        this.$store.dispatch('REMOVE_HISTORYDETAILS');
     }
 }
 </script>

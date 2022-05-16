@@ -11,6 +11,12 @@ let stateData = {
     show:false,
     msg:null,
     type:null,
+  },
+  historyDetails:{
+    selectedNums:[],
+    drawedNums:[],
+    moneyWon:null,
+    drawTime: null
   }
 }
 
