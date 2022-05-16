@@ -79,7 +79,7 @@ export default {
             }
 
             const delay = () => new Promise(resolve => {
-                setTimeout(resolve, "2000")
+                setTimeout(resolve, "4000")
             });
 
             const numsToDraw = this.drawedNums.length ? 5 - this.drawedNums.length : 5;
@@ -162,7 +162,7 @@ export default {
         this.drawedNums = this.GET_CURRENTDRAWS
         setTimeout(() => {
             this.startDrawn();
-        }, "500");
+        }, "3000");
     },
 }
 </script>
