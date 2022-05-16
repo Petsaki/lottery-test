@@ -4,21 +4,23 @@
             <router-link to="/history" class="pl-8 mb-5">	
                 &#10094; Go back
             </router-link>
-            <div class="w-full flex flex-col items-center box-border bg-white rounded-md shadow-md">
+            <div v-show="loading" class="app-loading-circle mx-auto"></div>
+            <div v-show="!loading" class="relative w-full flex flex-col items-center box-border bg-white rounded-md shadow-md">
+                <div class="flex flex-col items-center z-30">
+                    <span class="font-semibold flex-1 flex justify-end items-center">Draw date:</span> 
+                    <div class="flex-1"> {{drawTime ? drawTime.toUTCString().split(' ').slice(0, 5).join(' ') : ""}}</div> 
+
+
+                    <span class="font-semibold flex-1 flex justify-end items-center">Status:</span> 
+                    <div class="flex-1"> {{moneyWon !== 0 ? "Won" : "Lost"}}</div> 
+
+                    <span class="font-semibold flex-1 flex justify-end items-center">Money won:</span> 
+                    <div class="flex-1"> {{moneyWon > 0 ? moneyWon : '-'}}</div> 
+                </div>       
                         
-                <span class="font-semibold flex-1 flex justify-end items-center">Draw date:</span> 
-                <div class="flex-1"> {{drawTime ? drawTime.toUTCString().split(' ').slice(0, 5).join(' ') : ""}}</div> 
+                <div class="flex gap-5 mt-5 w-full relative md:absolute bg-white rounded-md shadow-md">
 
-
-                <span class="font-semibold flex-1 flex justify-end items-center">Status:</span> 
-                <div class="flex-1"> {{moneyWon !== 0 ? "Won" : "Lost"}}</div> 
-
-                <span class="font-semibold flex-1 flex justify-end items-center">Money won:</span> 
-                <div class="flex-1"> {{moneyWon > 0 ? moneyWon : '-'}}</div> 
-                        
-                <div class="flex gap-5 mt-5 w-full">
-
-                    <div class="flex flex-col items-center flex-1">
+                    <div class="flex flex-col items-center flex-1 ">
                         <span class="font-semibold mb-3 text-center">Drawed Numbers:</span>
                         <div v-for="num in drawedNums" :key="num" class="flex flex-col mb-3">
                             <button class="app-ball cursor-default">
@@ -56,6 +58,7 @@ export default {
             drawedNums:null,
             moneyWon:null,
             drawTime: null,
+            loading:true,
         }
     },
     async created(){
@@ -70,6 +73,8 @@ export default {
                 this.drawTime = (historyDetails.data().drawTime.toDate());
             } catch {
                 this.$router.push({ path: '/history' })
+            }finally{
+                this.loading= false;
             }
         }
     }
