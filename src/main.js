@@ -22,7 +22,9 @@ Vue.config.productionTip = false
 let app;
 
 const auth = getAuth();
+
 onAuthStateChanged(auth, async (user) => {
+  user ? Vue.prototype.$user = user : Vue.prototype.$user = null
   if (user) {
       store.commit('SET_LOADING',true);
       try {
@@ -41,6 +43,7 @@ onAuthStateChanged(auth, async (user) => {
   } else {
     store.dispatch('REMOVE_USERDATA');
   }
+
 
   if (!app){
     app=

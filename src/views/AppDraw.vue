@@ -18,7 +18,7 @@
                         <ul class="grid grid-rows-1 grid-cols-1 grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
                             <li v-for="num in selectedNums" :key="num"  class="flex justify-center items-center">
                         
-                                <button :ref="'UserNums' + num" class="app-ball cursor-default disabled:shadow-3d-match disabled:sm:shadow-3d-match-sm group ">
+                                <button :ref="`UserNums${num}`" class="app-ball cursor-default disabled:shadow-3d-match disabled:sm:shadow-3d-match-sm group ">
                                     <span class="underline decoration-gray-700 group-disabled:animate-spin ">{{ num }}</span>
                                 </button>
                             </li>
@@ -35,7 +35,6 @@
 <script>
 import AppModal from '../components/AppModal.vue'
 import { setDoc, doc, getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 import { mapGetters } from 'vuex';
 
 export default {
@@ -45,10 +44,10 @@ export default {
     },
     data() {
         return {
-            selectedNums:this.watchPlayerNums,
+            selectedNums:[],
             drawedDiv:"Loading...",
             drawEnded:false,
-            drawedNums:this.watchCurrentDraw,
+            drawedNums:[],
             showModal:false,
             winningNum:0,
             moneyWon:0,
@@ -58,36 +57,26 @@ export default {
     computed: {
     ...mapGetters(['GET_PLAYERNUMS','GET_CURRENTDRAWS'])
     },
-    watch: {
-        watchPlayerNums() {
-            this.selectedNums = this.GET_PLAYERNUMS
-        },
-        watchCurrentDraw() {
-            this.drawedNums = this.GET_CURRENTDRAWS
-        },
-    },
     methods:{
-        async startDrawn(){
-            this.drawedDiv=""
-            if (this.drawedNums.length !== 0){
+        highlightDrawedNums(){
                 this.drawedNums.forEach( (drawedNum) => {
                     if (this.selectedNums.includes(drawedNum)){
                         this.winningNum++
-                        this.$refs["UserNums"+ drawedNum][0].disabled = true;
+                        setTimeout(() => {
+                            this.$refs["UserNums"+ drawedNum][0].disabled = true;
+                        });
+                        
                     }
                 });
-            }
+        },
+        async startDrawn(){
+            this.drawedDiv=""
 
             const delay = () => new Promise(resolve => {
-                setTimeout(resolve, "4000")
+                setTimeout(resolve, "2000")
             });
 
-            const numsToDraw = this.drawedNums.length ? 5 - this.drawedNums.length : 5;
-
-            for (let i = 0; i < numsToDraw; i++) {
-                const auth = getAuth();
-                const user = auth.currentUser;
-                if (user){
+            while (this.drawedNums.length < 5 && this.$user){
                     await delay()
                         .then(()=>{
                             var drawedNum = Math.ceil(Math.random() * (30-1) + 1)
@@ -100,11 +89,9 @@ export default {
                             }
                             this.drawedNums.push(drawedNum);
                             this.$store.commit('ADD_CURRENTDRAW', this.drawedNums);
-                            const auth = getAuth();
-                            const user = auth.currentUser;
-                    
+
                             try {
-                                setDoc(doc(getFirestore(), "users", user.uid), {
+                                setDoc(doc(getFirestore(), "users", this.$user.uid), {
                                     currentNums: this.$store.getters.GET_PLAYERNUMS,
                                     drawRunning: this.$store.getters.GET_DRAWINPROG,
                                     currentDraw: this.drawedNums,
@@ -115,9 +102,6 @@ export default {
 
                             this.checkWinningNums();
                         })
-                }else{
-                    return;
-                }
             }
             if (this.drawedNums.length === 5){
                 this.currentTime = new Date();
@@ -142,11 +126,9 @@ export default {
             }
         },
         async updateDrawingDB(){
-            const auth = getAuth();
-            const user = auth.currentUser;
-            if (user){
+            if (this.$user){
                 try {
-                    await setDoc(doc(getFirestore(), "users", user.uid), {
+                    await setDoc(doc(getFirestore(), "users", this.$user.uid), {
                         drawRunning: this.$store.getters.GET_DRAWINPROG,
                         currentNums:[],
                         currentDraw:[],
@@ -158,11 +140,18 @@ export default {
         },
     },
     mounted(){
-        this.selectedNums = this.GET_PLAYERNUMS
-        this.drawedNums = this.GET_CURRENTDRAWS
-        setTimeout(() => {
-            this.startDrawn();
-        }, "3000");
+          this.$nextTick(function () {
+            this.selectedNums = this.GET_PLAYERNUMS
+            this.drawedNums = this.GET_CURRENTDRAWS
+            if (this.drawedNums.length !== 0){
+                this.highlightDrawedNums();
+                this.startDrawn();
+            }else{
+                setTimeout(() => {
+                    this.startDrawn();
+                }, "1000");
+            }
+        })
     },
 }
 </script>

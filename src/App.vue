@@ -5,7 +5,13 @@
       <div  class="app-loading-circle"></div>
     </div>
      
-    <router-view v-if="!GET_LOADING"/>
+    <!-- <router-view v-if="!GET_LOADING"/> -->
+
+
+    <!-- <transition 
+        :name="slideDirection" mode="out-in"> -->
+        <router-view v-if="!GET_LOADING"/>
+    <!-- </transition> -->
 
     <app-toast v-if="this.GET_TOAST_SHOW" :msg="this.GET_TOAST_MSG" :type="this.GET_TOAST_TYPE"/>
   </div>
@@ -28,8 +34,20 @@ export default {
     return{
       auth:null,
       checkRouter:null,
+      // slideLeft:true,
     }
   },
+  // watch:{
+  //   $route (to,from){
+  //       if ((to.path === '/history' && from.path.indexOf("/history/") !== -1)
+  //         || (from.path === '/history' && to.path.indexOf("/history/") !== -1 )
+  //         || (from.path === '/' && to.path === '/liveDraw')){
+  //         this.slideLeft = false;
+  //       }else{
+  //         this.slideLeft = true;
+  //       }
+  //   }
+  // }, 
   computed:{
     ...mapGetters([
       "GET_TOAST_SHOW",
@@ -39,7 +57,10 @@ export default {
     ]),
     isNotLoginSignUp() {
       return this.$route.path !== "/login" &&  this.$route.path !== "/signUp";
-    }
+    },
+    // slideDirection(){
+    //   return this.slideLeft ? 'fade2' : 'fade';
+    // },
   },
   created(){
     const user = getAuth().currentUser
@@ -84,4 +105,38 @@ export default {
     @apply block cursor-pointer object-cover max-h-[96px] max-w-[128px];
   }
 }
+
+/* .fade-enter-active,
+.fade-leave-active {
+  @apply transition duration-700 ease-in-out;
+
+}
+.fade-enter{
+  @apply translate-x-full opacity-40;
+}
+.fade-leave-to {
+  @apply -translate-x-full opacity-40;
+}
+
+.fade-enter-to{
+  @apply translate-x-0 opacity-100
+}
+.fade-leave {
+  @apply translate-x-0 opacity-100;
+} */
+
+/* .fade2-enter-active,
+.fade2-leave-active {
+  @apply transition duration-500 ease-out;
+
+}
+.fade2-enter
+.fade2-leave-to {
+  @apply translate-x-full;
+} */
+
+/* .fade2-enter-to,
+.fade2-leave {
+  @apply -translate-x-full;
+} */
 </style>
