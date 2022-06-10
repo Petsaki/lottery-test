@@ -44,7 +44,6 @@
 <script>
 
 import { getFirestore, getDocs, collection, query, orderBy, deleteDoc, doc } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 
 export default {
     name: 'AppHistory',
@@ -61,11 +60,9 @@ export default {
     },
     methods:{
         async removeDrawHistory(index){
-        const auth = getAuth();
-        const user = auth.currentUser;
-        if (user){
+        if (this.$user){
             try {
-                await deleteDoc(doc(getFirestore(), "users", user.uid,"history",this.docsID[index]));
+                await deleteDoc(doc(getFirestore(), "users", this.$user.uid,"history",this.docsID[index]));
                 this.selectedNums.splice(index, 1);
                 this.drawedNums.splice(index, 1);
                 this.moneyWon.splice(index, 1);
@@ -92,12 +89,10 @@ export default {
     },
 
     async created(){
-        const auth = getAuth();
-        const user = auth.currentUser;
-        if (user){
+        if (this.$user){
             this.loading=true;
             try {
-                const q = query(collection(getFirestore(), "users", user.uid,"history"),orderBy("drawTime", "desc"))
+                const q = query(collection(getFirestore(), "users", this.$user.uid,"history"),orderBy("drawTime", "desc"))
                 const userHistory = await getDocs(q);
                 userHistory.forEach((doc) => {
                     this.selectedNums.push(doc.data().playerNums);

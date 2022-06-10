@@ -23,7 +23,6 @@
 <script>
 
 import { addDoc, collection, getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 
 export default {
     name: 'AppModal',
@@ -38,11 +37,9 @@ export default {
                 msg:"",
                 type:""
             })
-            const auth = getAuth();
-            const user = auth.currentUser;
-            if (user){
+            if (this.$user){
                 try {
-                    await addDoc(collection(getFirestore(),"users", user.uid,"history"), {
+                    await addDoc(collection(getFirestore(),"users", this.$user.uid,"history"), {
                         drawTime: this.drawTime, 
                         drawNums:this.$store.getters.GET_CURRENTDRAWS,
                         playerNums:this.$store.getters.GET_PLAYERNUMS,

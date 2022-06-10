@@ -28,16 +28,32 @@
                 </div>
                 <div  ref="playerNums" class="md:flex-[1_1_30%] py-5 px-3 flex justify-center items-center">
                     <button v-if="showBtn" @click="goAtDraw" class="app-btn bg-orange-500 text-white">Play!</button>
+                    <app-button v-if="showBtn" @click.native="goAtDraw">
+                        Play!
+                    </app-button>
                 </div>
             </div>
-        </div> 
+        </div>
+        <div class="flex justify-center items-center gap-3">
+        <app-button tagProp=true toProp="/history">
+            Hello from the button!
+        </app-button>
+        <app-button class='bg-blue-900'>
+            Hello from the button!
+        </app-button>
+        </div>
     </div>
 </template>
 
 <script>
 
+import AppButton from '../components/AppButton.vue';
+
 export default {
     name: 'AppMain',
+    components: {
+    'app-button':  AppButton,
+    },
     data() {
         return {
             selectedNums:[],

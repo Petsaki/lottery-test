@@ -47,7 +47,6 @@
 <script>
 
 import { getFirestore, getDoc, doc } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 
 export default {
     name: 'HistoryDetails',
@@ -63,12 +62,10 @@ export default {
     },
     async created(){
         if (this.selectedNums.length < 5){
-            const auth = getAuth();
-            const user = auth.currentUser;
-            if (user){
+            if (this.$user){
                 console.log("FIREBASE CALL")
                 try {
-                    const historyDetails = await getDoc(doc(getFirestore(), "users", user.uid, "history", this.id.id));
+                    const historyDetails = await getDoc(doc(getFirestore(), "users", this.$user.uid, "history", this.id.id));
                     this.selectedNums = (historyDetails.data().playerNums);
                     this.drawedNums = (historyDetails.data().drawNums);
                     this.moneyWon = (historyDetails.data().totalWon);
