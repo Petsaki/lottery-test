@@ -3,7 +3,7 @@
         <div class="flex flex-col items-center py-7">
             <h1 class="text-xl font-bold ">Your History:</h1>
             <ul class="m-5 w-full flex flex-col items-center">
-                <div  v-show="loading"  class="app-loading-circle"></div>
+                <app-circle-loading :loadingProp="loading"/>
                 <div v-if="emptyHistory">
                     You don't have previous games at history :/
                 </div>
@@ -44,9 +44,13 @@
 <script>
 
 import { getFirestore, getDocs, collection, query, orderBy, deleteDoc, doc } from "firebase/firestore";
+import AppCircleLoading from '@/components/AppCircleLoading.vue';
 
 export default {
     name: 'AppHistory',
+    components:{
+        'app-circle-loading':  AppCircleLoading,
+    },
     data(){
         return{
             selectedNums:[],

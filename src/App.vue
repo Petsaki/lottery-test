@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-[#f5f5f6]">
     <app-header  v-if="this.$store.getters.IS_LOGGEDIN"/>
     <div v-show="GET_LOADING" class="flex justify-center items-center pt-20 ">
-      <div  class="app-loading-circle"></div>
+      <app-circle-loading/>
     </div>
      
     <!-- <router-view v-if="!GET_LOADING"/> -->
@@ -23,12 +23,14 @@ import AppToast from './components/AppToast.vue'
 import {mapGetters} from 'vuex'
 import AppHeader from './components/AppHeader.vue';
 import { getAuth } from '@firebase/auth';
+import AppCircleLoading from './components/AppCircleLoading.vue';
 
 export default {
   name: 'App',
   components: {
     'app-toast':  AppToast,
     'app-header':  AppHeader,
+    'app-circle-loading':  AppCircleLoading,
   },
   data(){
     return{
@@ -102,7 +104,7 @@ export default {
     background: radial-gradient(circle at 18px 18px, #86efac, #15803d);
   }
   .app-img-logo {
-    @apply block cursor-pointer object-cover max-h-[96px] max-w-[128px];
+    @apply block cursor-pointer object-scale-down w-[128px] min-w-[40px];
   }
 }
 

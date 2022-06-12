@@ -5,16 +5,12 @@
                 {{moneyWon > 0 ? 'Congratulations! You just won: ' + moneyWon + "€" : "You didn't won anything. Better luck next time!"}}
             </div>
             <div class="flex justify-between flex-wrap">
-                <button
-                    @click.once="saveDraw()" 
-                    class="app-btn bg-orange-500 text-white">
-                        Save to History
-                </button>
-                <button
-                    @click.once="goAtMain()"
-                    class="app-btn text-blue-600">
-                        Go back
-                </button>
+                <app-button @click.native.once="saveDraw()" class="bg-orange-500 text-white">
+                    Save to History
+                </app-button>
+                <app-button @click.native.once="goAtMain()" class="text-blue-600">
+                    Go back
+                </app-button>
             </div>
         </div>
     </div>
@@ -23,9 +19,13 @@
 <script>
 
 import { addDoc, collection, getFirestore } from "firebase/firestore";
+import AppButton from './AppButton.vue';
 
 export default {
     name: 'AppModal',
+    components: {
+        'app-button':  AppButton,
+    },
     props:{
         moneyWon: Number,
         drawTime: Date,

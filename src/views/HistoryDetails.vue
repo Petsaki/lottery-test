@@ -4,7 +4,7 @@
             <router-link to="/history" class="pl-8 mb-5">	
                 &#10094; Go back
             </router-link>
-            <div v-show="loading" class="app-loading-circle mx-auto"></div>
+            <app-circle-loading :loadingProp="loading" class="mx-auto"/>
             <div v-show="!loading" class="relative w-full flex flex-col items-center box-border bg-white rounded-md shadow-md">
                 <div class="flex flex-col items-center z-30">
                     <span class="font-semibold flex-1 flex justify-end items-center">Draw date:</span> 
@@ -47,9 +47,13 @@
 <script>
 
 import { getFirestore, getDoc, doc } from "firebase/firestore";
+import AppCircleLoading from '@/components/AppCircleLoading.vue';
 
 export default {
     name: 'HistoryDetails',
+    components:{
+        'app-circle-loading':  AppCircleLoading,
+    },
     data(){
         return{
             id: this.$route.params,
@@ -57,7 +61,7 @@ export default {
             drawedNums:this.$store.getters.GET_HISTORY_DRAWEDNUMS,
             moneyWon:this.$store.getters.GET_HISTORY_MONEYWON,
             drawTime: this.$store.getters.GET_HISTORY_DRAWTIME,
-            loading:false,
+            loading:true,
         }
     },
     async created(){
