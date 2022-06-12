@@ -80,7 +80,7 @@ export default {
 
 @layer components {
   .app-btn {
-    @apply font-semibold rounded-md px-2 py-[6px] whitespace-nowrap leading-[21px] text-center cursor-pointer;
+    @apply font-semibold  rounded-md px-2 py-[6px] whitespace-nowrap leading-[21px] text-center cursor-pointer;
   }
   .app-loading-circle {
     @apply w-10 aspect-square rounded-full bg-transparent  border-4 border-r-blue-400 animate-spin;
@@ -89,7 +89,7 @@ export default {
     @apply bg-slate-300 rounded-md font-semibold px-1;
   }
   .app-ball {
-    @apply flex justify-center items-center rounded-full shadow-md shadow-gray-500/60 shadow-3d text-sm sm:text-lg w-14 sm:w-24 sm:shadow-3d-sm font-bold text-gray-700 aspect-square;
+    @apply flex justify-center items-center rounded-full shadow-md shadow-gray-500/60 shadow-3d text-sm sm:text-lg w-14 sm:w-24 sm:shadow-3d-sm font-bold text-gray-900 aspect-square;
   }
   .shadow-3d-sm {
     background: radial-gradient(circle at 32px 32px, #fde047, #a16207);

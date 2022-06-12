@@ -23,19 +23,14 @@
                     <div class="flex flex-col items-center flex-1 ">
                         <span class="font-semibold mb-3 text-center">Drawed Numbers:</span>
                         <div v-for="num in drawedNums" :key="num" class="flex flex-col mb-3">
-                            <button class="app-ball cursor-default">
-                                {{ num }}
-                            </button>
+                            <app-ball :numProp="num"/>
                         </div>
                     </div>
 
                     <div class="flex flex-col items-center flex-1">
                         <span class="font-semibold mb-3 text-center">Your Numbers:</span>
                         <div v-for="num in selectedNums" :key="num" class="flex flex-col mb-3">
-                            <button :class="[ drawedNums.includes(num)  ? 'shadow-3d-match sm:shadow-3d-match-sm': 'shadow-3d sm:shadow-3d-sm' ]"
-                                class="app-ball cursor-default">
-                                {{ num }}
-                            </button>
+                            <app-ball :numProp="num" :class="[ drawedNums.includes(num)  ? 'shadow-3d-match sm:shadow-3d-match-sm': 'shadow-3d sm:shadow-3d-sm' ]"/>
                         </div>
                     </div>
                 </div>
@@ -48,11 +43,13 @@
 
 import { getFirestore, getDoc, doc } from "firebase/firestore";
 import AppCircleLoading from '@/components/AppCircleLoading.vue';
+import AppBall from '@/components/AppBall.vue';
 
 export default {
     name: 'HistoryDetails',
     components:{
         'app-circle-loading':  AppCircleLoading,
+        'app-ball' : AppBall
     },
     data(){
         return{
@@ -76,11 +73,10 @@ export default {
                     this.drawTime = (historyDetails.data().drawTime.toDate().toUTCString().split(' ').slice(0, 5).join(' '));
                 } catch {
                     this.$router.push({ path: '/history' })
-                }finally{
-                    this.loading= false;
                 }
             }
         }
+        this.loading= false;
     },
     beforeDestroy(){
         this.$store.dispatch('REMOVE_HISTORYDETAILS');

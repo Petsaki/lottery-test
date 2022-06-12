@@ -3,10 +3,12 @@
     <form @submit.prevent="login" class="flex flex-col h-fit justify-start items-center gap-5 bg-white px-5 sm:px-12 border-2 rounded-md border-black pt-5 pb-8">
         <img alt="Logo Image" src="../assets/logo.png" class="app-img-logo"/>
           <app-input labelProp="Enter your email:">
-            <input type="email" required autofocus v-model="form.email" class="app-input"/>
+            <!-- Removed the v-model because i didnt really neeb the values to be up to date everytime but only when user submit :) -->
+            <!-- <input type="email" required autofocus v-model="form.email" class="app-input"/> -->
+            <input type="email" required autofocus name="email" class="app-input"/>
           </app-input>
           <app-input labelProp="Enter your password:">
-            <input type="password" required minlength="8" v-model="form.password" autocomplete="on" class="app-input"/>
+            <input type="password" required minlength="8" name="password" autocomplete="on" class="app-input"/>
           </app-input>
           <div class="flex justify-between w-full text-white pt-3">
             <app-button tagProp="input" typeProp="submit" valueProp="Log in" class="bg-blue-400"/>
@@ -41,7 +43,9 @@ export default {
     };
   },
   methods: {
-    login() {
+    login(e) {
+      this.form.email = e.target.elements.email.value;
+      this.form.password = e.target.elements.password.value;
       this.loading = true;
       this.$store.dispatch('SET_TOAST',{
         show:false,

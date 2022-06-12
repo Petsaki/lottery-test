@@ -5,24 +5,27 @@
                 <div class="flex justify-between  ">
                     <div class="flex gap-2 flex-col">
                         <span class="mb-2 font-semibold text-lg">Drawed Number:</span>
-                        <ul class="grid grid-rows-1 grid-cols-1 grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
-                            <li v-for="num in drawedNums" :key="num" class="flex justify-center items-center">
-                                <button class="app-ball cursor-default">
+                        <div class="grid grid-rows-1 grid-cols-1 grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
+                            <div v-for="num in drawedNums" :key="num" class="flex justify-center items-center">
+                                <!-- <button class="app-ball cursor-default">
                                     {{ num }}
-                                </button>
-                            </li>
-                        </ul>
+                                </button> -->
+                                <app-ball :numProp="num" />
+                            </div>
+                        </div>
                     </div>
                     <div class="flex gap-2 flex-col">
                         <span class="mb-2 font-semibold text-lg">Your Number:</span>
-                        <ul class="grid grid-rows-1 grid-cols-1 grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
-                            <li v-for="num in selectedNums" :key="num"  class="flex justify-center items-center">
-                        
-                                <button :ref="`UserNums${num}`" class="app-ball cursor-default disabled:shadow-3d-match disabled:sm:shadow-3d-match-sm group ">
-                                    <span class="underline decoration-gray-700 group-disabled:animate-spin ">{{ num }}</span>
-                                </button>
-                            </li>
-                        </ul>
+                        <div class="grid grid-rows-1 grid-cols-1 grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
+                            <div v-for="num in selectedNums" :key="num"  class="flex justify-center items-center">
+                                <app-ball :ref="`UserNums${num}`">
+                                    <span class="underline decoration-gray-900">{{ num }}</span>
+                                </app-ball>
+                                <!-- <button :ref="`UserNums${num}`" class="app-ball cursor-default disabled:shadow-3d-match disabled:sm:shadow-3d-match-sm group ">
+                                    <span class="underline decoration-gray-900 group-disabled:animate-spin ">{{ num }}</span>
+                                </button> -->
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <span class="my-2 font-semibold text-lg flex items-center justify-center">You have won: {{moneyWon}}</span>
@@ -36,11 +39,13 @@
 import AppModal from '../components/AppModal.vue'
 import { setDoc, doc, getFirestore } from "firebase/firestore";
 import { mapGetters } from 'vuex';
+import AppBall from '@/components/AppBall.vue';
 
 export default {
     name: 'AppDraw',
     components: {
     'app-modal':  AppModal,
+    'app-ball':  AppBall,
     },
     data() {
         return {
@@ -63,7 +68,8 @@ export default {
                     if (this.selectedNums.includes(drawedNum)){
                         this.winningNum++
                         setTimeout(() => {
-                            this.$refs["UserNums"+ drawedNum][0].disabled = true;
+                            this.$refs["UserNums"+ drawedNum][0].$el.children[0].classList.add("animate-spin")
+                            this.$refs["UserNums"+ drawedNum][0].$el.classList.value ="app-ball shadow-3d-match sm:shadow-3d-match-sm"
                         });
                         
                     }
@@ -83,9 +89,10 @@ export default {
                             while (this.drawedNums.includes(drawedNum)){
                                 drawedNum =Math.ceil(Math.random() * (30-1) + 1)
                             }
-                            if (this.selectedNums.includes(drawedNum) && !this.$refs["UserNums"+ drawedNum][0].disabled){
+                            if (this.selectedNums.includes(drawedNum)){
                                 this.winningNum++
-                                this.$refs["UserNums"+ drawedNum][0].disabled = true;
+                                this.$refs["UserNums"+ drawedNum][0].$el.children[0].classList.add("animate-spin")
+                                this.$refs["UserNums"+ drawedNum][0].$el.classList.value ="app-ball shadow-3d-match sm:shadow-3d-match-sm"
                             }
                             this.drawedNums.push(drawedNum);
                             this.$store.commit('ADD_CURRENTDRAW', this.drawedNums);

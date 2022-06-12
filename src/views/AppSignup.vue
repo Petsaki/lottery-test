@@ -3,17 +3,19 @@
     <form @submit.prevent="signUp" class="flex flex-col h-fit justify-start items-center gap-5 bg-white px-5 sm:px-12  rounded-md border-2 border-black pt-5 pb-8">
       <img alt="Logo Image" src="../assets/logo.png" class="app-img-logo"/>
       <app-input labelProp="Enter your email:">
-        <input type="email" required autofocus v-model="form.email" class="app-input"/>
+        <!-- Removed the v-model because i didnt really neeb the values to be up to date everytime but only when user submit :) -->
+        <!-- <input type="email" required autofocus v-model="form.email" class="app-input"/> -->
+        <input type="email" required autofocus v-model="form.email" name="email" class="app-input"/>
       </app-input>
 
       <app-input labelProp="Enter your password:">
-        <input type="password" required minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" v-model="form.password"
+        <input type="password" required minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="password"
           title="Must be 8 length at least and has 1 [A-Z], 1 [a-z], 1 [0-9]."
           class="app-input"/>
       </app-input>
       
       <app-input labelProp="Confirm password:">
-        <input type="password" required minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" v-model="form.confirmpass"
+        <input type="password" required minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="confirmpass"
           title="Must be 8 length at least and has 1 [A-Z], 1 [a-z], 1 [0-9]."
           class="app-input"/>
       </app-input>
@@ -22,7 +24,6 @@
         <app-button tagProp="input" typeProp="submit" valueProp="Sign up" class="bg-green-400 text-white"/>
         <app-button tagProp="router-link" toProp="/login" class="text-blue-500 underline decoration-blue-500">Log in</app-button>
       </div>
-      <div v-show="loading" class="app-loading-circle"></div>
       <app-circle-loading :loadingProp="loading"/>
     </form>
   </div>
@@ -53,7 +54,10 @@ export default {
     };
   },
   methods: {
-    async signUp() {
+    async signUp(e) {
+      this.form.email = e.target.elements.email.value;
+      this.form.password = e.target.elements.password.value;
+      this.form.confirmpass = e.target.elements.confirmpass.value;
       this.$store.dispatch('SET_TOAST',{
         show:false,
         msg:"",

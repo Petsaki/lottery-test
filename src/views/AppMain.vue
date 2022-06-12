@@ -5,20 +5,18 @@
                 <div class="bg-white rounded-md shadow-md m-3 md:flex-[1_1_70%] py-5 px-3">
                     <div class="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-6 gap-y-6 sm:gap-y-8 align-middle self-center justify-items-center font-semibold">
                         <div v-for="index in 30" :key="index" >
-                            <button @click="choosedNum(index)"  ref="boardNum" class="app-ball disabled:cursor-default disabled:grayscale hover:scale-105 disabled:scale-100">{{ index }}</button>
+                            <!-- <div @click="choosedNum(index)" tabindex="0" :ref="`boardNum${index}`" class="app-ball-actived">{{ index }}</div> -->
+                            <app-ball @click.native="choosedNum(index)" :ref="`boardNum${index}`" class="app-ball cursor-pointer hover:scale-105" :numProp="index"/>
                         </div>
                     </div>
                 </div>
                 <div :class="[selectedNums.length > 0 ? 'block' : 'hidden md:block']" ref="playerNums" class="md:flex-[1_1_30%] bg-white rounded-md shadow-md m-3 py-5 px-3">
-                    <ul class="grid grid-cols-4 sm:grid-cols-5 md:grid-rows-1 md:grid-cols-1 md:grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
-                        <li v-for="num in selectedNums" :key="num"  class="relative flex justify-center items-center">
-                        
-                            <button class="app-ball cursor-default">
-                                {{ num }}
-                            </button>
-                            <span tabindex=0 class="absolute -top-2 -right-2 cursor-pointer text-sm sm:text-base" @click="removeNum(num)" @keypress.enter="removeNum(num)">&#10005;</span>
-                        </li>
-                    </ul>
+                    <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-rows-1 md:grid-cols-1 md:grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
+                        <div v-for="num in selectedNums" :key="num"  class="relative flex justify-center items-center">
+                            <app-ball class="app-ball" :numProp="num"/>
+                            <span tabindex=0 class="absolute -top-2 -right-2 cursor-pointer text-sm sm:text-base text-gray-900" @click="removeNum(num)" @keypress.enter="removeNum(num)">&#10005;</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="flex flex-col-reverse md:flex-row">
@@ -37,6 +35,7 @@
 </template>
 
 <script>
+import AppBall from '@/components/AppBall.vue';
 
 import AppButton from '../components/AppButton.vue';
 
@@ -44,6 +43,7 @@ export default {
     name: 'AppMain',
     components: {
     'app-button':  AppButton,
+    'app-ball':  AppBall,
     },
     data() {
         return {
@@ -53,6 +53,7 @@ export default {
     },
     methods:{
         choosedNum(num){
+            if (this.selectedNums.includes(num)) return
             // Bug: I think it was some issue with the objects. it wants to make a spread operator or Object.assign
             this.$store.dispatch('SET_TOAST',{
                 show:false,
@@ -60,10 +61,11 @@ export default {
                 type:""
             }) 
             
-            if (this.selectedNums.includes(num)) return
+            
 
             if (this.selectedNums.length < 5){
-                this.$refs.boardNum[num-1].disabled = true;
+                this.$refs["boardNum"+ num][0].$el.classList.value = "app-ball grayscale";
+                
                 this.selectedNums.push(num);
                 if (this.selectedNums.length === 5){
                     this.showBtn = true;
@@ -89,7 +91,8 @@ export default {
             this.showBtn = false;
             this.selectedNums = this.selectedNums.filter(arrayNum => arrayNum !== num);
             this.$store.commit('ADD_PLAYERNUMS',this.selectedNums)
-            this.$refs.boardNum[num-1].disabled = false;
+            this.$refs["boardNum"+ num][0].$el.classList.value = "app-ball cursor-pointer hover:scale-105";
+            
         },
         goAtDraw(){
             this.$root.$emit('headerComponent')
@@ -108,7 +111,7 @@ export default {
             }
             if (this.selectedNums){
                 this.selectedNums.map((num)=>{
-                    this.$refs.boardNum[num-1].disabled = true;
+                    this.$refs["boardNum"+ num][0].$el.classList.value = "app-ball grayscale";
                 })
             }
         })
