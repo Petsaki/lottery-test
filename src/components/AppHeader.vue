@@ -19,7 +19,7 @@
                     </div>
                 
                     <div class="flex gap-2 justify-center items-center">
-                        <img alt="User's Image" src="../assets/logo.png" class="w-12 h-12 bg-center object-cover bg-no-repeat rounded-full border-dashed border"/>
+                        <img alt="User's Image" src="../assets/logo.png" tabindex="0" class="w-12 h-12 bg-center object-cover bg-no-repeat rounded-full border-dashed border"/>
                          <app-button @click.native="logout" class="bg-red-600">Log Out</app-button>
                     </div>
                 </ul>

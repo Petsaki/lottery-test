@@ -24,8 +24,18 @@
                 <div class="md:flex-[1_1_70%]">
                 
                 </div>
-                <div  ref="playerNums" class="md:flex-[1_1_30%] py-5 px-3 flex justify-center items-center text-white">
-                    <app-button v-if="showBtn" @click.native="goAtDraw" class="bg-orange-500">
+                <div  ref="playerNums" class="md:flex-[1_1_30%] relative py-5 px-3 flex justify-start gap-5 items-center text-white flex-wrap xl:flex-nowrap">
+                    <app-button @click.native="addRandomNums" class="bg-blue-700 flex justify-start items-start relative group after:absolute after:cursor-default after:pointer-events-none
+                        after:content-['It_will_fill_the_remaining_numbers.'] after:text-white  after:w-full after:h-full after:text-sm  after:bg-gray-600/80 after:-translate-y-[123%] after:py-5 after:px-[2px] after:top-0 after:rounded-md after:flex after:justify-center after:items-center after:whitespace-pre-wrap after:right-1/2 after:translate-x-1/2
+                        before:content[''] before:absolute  before:right-1/2 before:translate-x-1/2 before:bg-transparent before:cursor-default before:top-0 before:pointer-events-none before:-translate-y-[120%] before:border-r-8 before:border-l-8 before:border-t-8 before:border-r-transparent before:border-l-transparent before:border-t-gray-600/80
+                        after:delay-[.15s] hover:after:delay-500 after:transition-opacity after:opacity-0 hover:after:opacity-100
+                        before:delay-[.15s] hover:before:delay-500 before:transition-opacity before:opacity-0 hover:before:opacity-100">
+                        Random Numbers
+                    </app-button>
+                    <app-button v-show="this.selectedNums.length" @click.native="clearSelectedNums" class="bg-blue-700">
+                        Clear all
+                    </app-button>
+                    <app-button v-if="showBtn" @click.native="goAtDraw" class="bg-orange-500 xl::absolute right-5">
                         Play!
                     </app-button>
                 </div>
@@ -96,7 +106,21 @@ export default {
         },
         goAtDraw(){
             this.$root.$emit('headerComponent')
-        }
+        },
+        addRandomNums(){
+            while (this.selectedNums.length < 5){
+                var drawedNum = Math.ceil(Math.random() * (30-1) + 1);
+                while (this.selectedNums.includes(drawedNum)){
+                    drawedNum =Math.ceil(Math.random() * (30-1) + 1)
+                }
+                this.choosedNum(drawedNum);
+            }
+        },
+        clearSelectedNums(){
+            while (this.selectedNums.length){
+                this.removeNum(this.selectedNums.pop())
+            }
+        },
     },
     created(){
         this.selectedNums= this.$store.getters.GET_PLAYERNUMS

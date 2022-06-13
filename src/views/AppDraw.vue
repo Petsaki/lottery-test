@@ -79,7 +79,7 @@ export default {
             this.drawedDiv=""
 
             const delay = () => new Promise(resolve => {
-                setTimeout(resolve, "100")
+                setTimeout(resolve, "2000")
             });
 
             while (this.drawedNums.length < 5 && this.$user){
@@ -156,7 +156,7 @@ export default {
             }else{
                 setTimeout(() => {
                     this.startDrawn();
-                }, "100");
+                }, "1000");
             }
         })
     },
