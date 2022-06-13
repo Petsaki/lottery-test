@@ -31,7 +31,7 @@
                 <span class="my-2 font-semibold text-lg flex items-center justify-center">You have won: {{moneyWon}}</span>
             </div>
         </div>
-        <app-modal v-if="showModal" :moneyWon="this.moneyWon" :drawTime="this.currentTime"/>
+        <app-modal :showModal="showModal" :moneyWon="this.moneyWon" :drawTime="this.currentTime"/>
     </div>
 </template>
 
@@ -79,7 +79,7 @@ export default {
             this.drawedDiv=""
 
             const delay = () => new Promise(resolve => {
-                setTimeout(resolve, "2000")
+                setTimeout(resolve, "100")
             });
 
             while (this.drawedNums.length < 5 && this.$user){
@@ -156,7 +156,7 @@ export default {
             }else{
                 setTimeout(() => {
                     this.startDrawn();
-                }, "1000");
+                }, "100");
             }
         })
     },

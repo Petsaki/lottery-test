@@ -108,6 +108,13 @@ export default {
   }
 }
 
+@layer base {
+  dialog::backdrop {
+    @apply bg-gray-600/40
+  }
+  /* ... */
+}
+
 /* .fade-enter-active,
 .fade-leave-active {
   @apply transition duration-700 ease-in-out;

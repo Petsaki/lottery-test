@@ -35,7 +35,7 @@
                         <span tabindex=0 class="absolute top-0 right-2  cursor-pointer " @click="removeDrawHistory(index)">&#10005;</span>
                     </div>
                 </li>
-                <div @click="goAtTop" v-show="!loading" class="cursor-pointer underline font-semibold">Go at top</div>
+                <div @click="goAtTop" v-show="!loading && this.selectedNums.length > 6" class="cursor-pointer underline font-semibold">Go at top</div>
             </ul>
         </div>
     </div>

@@ -1,6 +1,5 @@
 <template>
-    <div class="fixed z-30 top-0 right-0 min-h-screen min-w-full bg-gray-500/70 flex justify-center items-center">
-        <div class="bg-white p-3 sm:p-5 border-2 rounded-md max-w-xl w-3/4">
+        <dialog ref="dialog" class="bg-white p-3 sm:p-5 border-2 rounded-md max-w-xl w-3/4">
             <div class="pb-6 text-lg font-semibold">
                 {{moneyWon > 0 ? 'Congratulations! You just won: ' + moneyWon + "€" : "You didn't won anything. Better luck next time!"}}
             </div>
@@ -12,8 +11,7 @@
                     Go back
                 </app-button>
             </div>
-        </div>
-    </div>
+        </dialog>
 </template>
 
 <script>
@@ -29,6 +27,25 @@ export default {
     props:{
         moneyWon: Number,
         drawTime: Date,
+        showModal: Boolean,
+    },
+    watch:{
+        showModal(showModal){
+            this.$nextTick(() =>{
+                showModal ? this.$refs.dialog.showModal() : this.$refs.dialog.close();
+            })
+        }
+    },
+    created(){
+        this.escapeHandler = (e) => {
+            if (e.key === "Escape" && this.showModal){
+                this.goAtMain();
+            }
+        }
+        document.addEventListener('keydown',this.escapeHandler);
+    },
+    destroyed(){
+        document.removeEventListener('keydown',this.escapeHandler);
     },
     methods:{
         async saveDraw(){
