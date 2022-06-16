@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen bg-[#f5f5f6]">
+  <div class="min-h-screen bg-svg-bg bg-fixed">
     <app-header  v-if="this.$store.getters.IS_LOGGEDIN"/>
     <div v-show="GET_LOADING" class="flex justify-center items-center pt-20 ">
-      <app-circle-loading/>
+      <app-circle-loading class="absolute top-[calc(50%-40px)] mx-auto"/>
     </div>
      
     <!-- <router-view v-if="!GET_LOADING"/> -->

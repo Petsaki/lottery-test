@@ -1,19 +1,19 @@
 <template>
     <div v-if="this.$store.getters.IS_LOGGEDIN">
-        <div class="flex flex-col items-center py-7">
+        <div class="flex flex-col items-center py-7 max-w-7xl mx-auto">
             <h1 class="text-xl font-bold ">Your History:</h1>
-            <ul class="m-5 w-full flex flex-col items-center">
+            <div class="m-5 w-full flex flex-col gap-2 justify-center items-center ">
                 <app-circle-loading :loadingProp="loading"/>
                 <div v-if="emptyHistory">
                     You don't have previous games at history :/
                 </div>
-                <li v-for="(num, index) in selectedNums" :key="index" class="pb-4 max-w-lg w-11/12">
+                <div v-for="(num, index) in selectedNums" :key="index" class="mb-2 bg-white odd:bg-zinc-100 rounded-md shadow-md max-w-lg w-11/12">
 
                     <div class="relative">
                         <span
                             @click="historyDetails(selectedNums[index],drawedNums[index],moneyWon[index],drawTime[index].toDate().toUTCString().split(' ').slice(0, 5).join(' '),docsID[index])"
                             tabindex=0 
-                            class="relative bg-white py-4 px-2 sm:p-4 rounded-md shadow-md flex flex-col items-center justify-items-start cursor-pointer">
+                            class="relative py-4 px-2 sm:p-4  flex flex-col items-center justify-items-start cursor-pointer">
 
                             <div class="flex w-full gap-1">
                                 <span class="font-semibold flex-1 flex justify-end items-center text-right">Draw date:</span>
@@ -34,9 +34,9 @@
                         </span>
                         <span tabindex=0 class="absolute top-0 right-2  cursor-pointer " @click="removeDrawHistory(index)">&#10005;</span>
                     </div>
-                </li>
-                <div @click="goAtTop" v-show="!loading && this.selectedNums.length > 6" class="cursor-pointer underline font-semibold">Go at top</div>
-            </ul>
+                </div>
+            </div>
+            <div @click="goAtTop" v-show="!loading && this.selectedNums.length > 6" class="cursor-pointer underline font-semibold">Go at top</div>
         </div>
     </div>
 </template>

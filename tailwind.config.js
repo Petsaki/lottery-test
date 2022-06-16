@@ -23,6 +23,9 @@ module.exports = {
         'toastAniMD': 'toastFrameRight 4s ease-out forwards ',
         'toastAniSM': 'toastFrameUp 4s ease-out forwards '
       },
+      backgroundImage: {
+        'svg-bg': "url('./assets/svg_bg.svg')",
+      },
     },
   },
   plugins: [],
