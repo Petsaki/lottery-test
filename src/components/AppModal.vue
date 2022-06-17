@@ -68,8 +68,9 @@ export default {
                         msg:"Draw saved to history successfully!",
                         type:"success"
                     })
+                    this.$store.commit('SET_UPDATEHISTORY',true)
                 } catch (e) {
-                console.error("Error adding document: ", e);
+                    console.error("Error adding document: ", e);
                 }
             }
             this.goAtMain();

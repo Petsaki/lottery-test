@@ -10,7 +10,9 @@
 
     <!-- <transition 
         :name="slideDirection" mode="out-in"> -->
+      <keep-alive include="AppHistory"> 
         <router-view v-if="!GET_LOADING"/>
+      </keep-alive>
     <!-- </transition> -->
 
     <app-toast v-if="this.GET_TOAST_SHOW" :msg="this.GET_TOAST_MSG" :type="this.GET_TOAST_TYPE"/>

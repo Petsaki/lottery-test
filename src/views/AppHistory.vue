@@ -45,6 +45,7 @@
 
 import { getFirestore, getDocs, collection, query, orderBy, deleteDoc, doc } from "firebase/firestore";
 import AppCircleLoading from '@/components/AppCircleLoading.vue';
+import { mapGetters } from 'vuex';
 
 export default {
     name: 'AppHistory',
@@ -60,7 +61,11 @@ export default {
             docsID:[],
             emptyHistory:false,
             loading:false,
+            updateHistory: false,
         }
+    },
+    computed: {
+    ...mapGetters(['GET_UPDATE_HISTORY'])
     },
     methods:{
         async removeDrawHistory(index){
@@ -89,28 +94,36 @@ export default {
                 drawTime:drawTime,
             })
             this.$router.push({ path: '/history/' + docsID })
-        }
-    },
-
-    async created(){
-        if (this.$user){
-            this.loading=true;
-            try {
-                const q = query(collection(getFirestore(), "users", this.$user.uid,"history"),orderBy("drawTime", "desc"))
-                const userHistory = await getDocs(q);
-                userHistory.forEach((doc) => {
-                    this.selectedNums.push(doc.data().playerNums);
-                    this.drawedNums.push(doc.data().drawNums);
-                    this.moneyWon.push(doc.data().totalWon);
-                    this.drawTime.push(doc.data().drawTime);
-                    this.docsID.push(doc.id);
-                });
-            } catch (e) {
-                console.error("Error adding document: ", e);
-            }finally{
-                this.loading=false;
+        },
+        async getHistoryData(){
+            if (this.$user){
+                this.loading=true;
+                try {
+                    const q = query(collection(getFirestore(), "users", this.$user.uid,"history"),orderBy("drawTime", "desc"))
+                    const userHistory = await getDocs(q);
+                    userHistory.forEach((doc) => {
+                        this.selectedNums.push(doc.data().playerNums);
+                        this.drawedNums.push(doc.data().drawNums);
+                        this.moneyWon.push(doc.data().totalWon);
+                        this.drawTime.push(doc.data().drawTime);
+                        this.docsID.push(doc.id);
+                    });
+                } catch (e) {
+                    console.error("Error adding document: ", e);
+                }finally{
+                    this.loading=false;
+                }
+                this.selectedNums.length === 0 ? this.emptyHistory = true : this.emptyHistory = false
             }
-            this.selectedNums.length === 0 ? this.emptyHistory = true : this.emptyHistory = false
+        },
+    },
+    created(){
+        this.getHistoryData()
+    },
+    activated(){
+        if (this.GET_UPDATE_HISTORY){
+            this.getHistoryData()
+            this.$store.commit('SET_UPDATEHISTORY',false)
         }
     }
 }

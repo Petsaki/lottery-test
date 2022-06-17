@@ -41,6 +41,12 @@ export const ADD_TOAST = (state,{show, msg, type}) => {
     state.toastData.type = type;
 }
 
+// History
+
+export const SET_UPDATEHISTORY = (state, payload) => {
+    state.history.updateHistory = payload;
+}
+
 // History Details
 export const ADD_HISTORYDETAILS = (state,{selectedNums, drawedNums, moneyWon,drawTime}) => {
     state.historyDetails.selectedNums = selectedNums

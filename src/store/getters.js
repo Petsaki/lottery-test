@@ -18,6 +18,10 @@ export const GET_TOAST_MSG = state => state.toastData.msg
 
 export const GET_TOAST_TYPE = state => state.toastData.type
 
+// History
+
+export const GET_UPDATE_HISTORY = state => state.history.updateHistory
+
 // History Details
 
 export const GET_HISTORY_PLAYERNUMS = state => state.historyDetails.selectedNums

@@ -12,6 +12,9 @@ let stateData = {
     msg:null,
     type:null,
   },
+  history:{
+    updateHistory:false,
+  },
   historyDetails:{
     selectedNums:[],
     drawedNums:[],
