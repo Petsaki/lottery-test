@@ -35,13 +35,19 @@ const router = new Router({
       {path:'/history/:id', component:HistoryDetails,meta: {requiresAuth: true}},
       {path:'/*', component:AppNotFound},
   ],
-  scrollBehavior() {
-    return {
-      y:0,
-      behavior: 'smooth',
+  // scrollBehavior() {
+  //   return {
+  //     y:0,
+  //     behavior: 'smooth',
+  //   }
+  // },
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return { top: 0 };
     }
   },
-  // scrollBehavior(to, from, savedPosition) {
 })
 
 

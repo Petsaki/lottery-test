@@ -1,9 +1,7 @@
 <template>
     <div v-if="this.$store.getters.IS_LOGGEDIN" class="max-w-7xl mx-auto">
         <div class="flex flex-col py-5 px-3">
-            <router-link to="/history" class="pl-8 mb-5">	
-                &#10094; Go back
-            </router-link>
+            <app-button @click.native="goBack" class="pl-8 mb-5 flex">&#10094; Go back</app-button>
             <app-circle-loading :loadingProp="loading" class="mx-auto"/>
             <div v-show="!loading" class="relative w-full flex flex-col items-center box-border bg-white rounded-md shadow-md">
                 <div class="flex flex-col items-center z-30">
@@ -44,12 +42,14 @@
 import { getFirestore, getDoc, doc } from "firebase/firestore";
 import AppCircleLoading from '@/components/AppCircleLoading.vue';
 import AppBall from '@/components/AppBall.vue';
+import AppButton from '@/components/AppButton.vue';
 
 export default {
     name: 'HistoryDetails',
     components:{
         'app-circle-loading':  AppCircleLoading,
-        'app-ball' : AppBall
+        'app-ball' : AppBall,
+        'app-button':  AppButton,
     },
     data(){
         return{
@@ -59,6 +59,11 @@ export default {
             moneyWon:this.$store.getters.GET_HISTORY_MONEYWON,
             drawTime: this.$store.getters.GET_HISTORY_DRAWTIME,
             loading:true,
+        }
+    },
+    methods:{
+        goBack(){
+            history.back()
         }
     },
     async created(){
