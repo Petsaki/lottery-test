@@ -3,7 +3,7 @@
         <div class="flex flex-col items-center py-7 max-w-7xl mx-auto">
             <h1 class="text-xl font-bold ">Your History:</h1>
             <div class="m-5 w-full flex flex-col gap-2 justify-center items-center ">
-                <app-circle-loading :loadingProp="loading"/>
+                <circle-loading :loadingProp="loading"/>
                 <div v-if="emptyHistory">
                     You don't have previous games at history :/
                 </div>
@@ -44,13 +44,13 @@
 <script>
 
 import { getFirestore, getDocs, collection, query, orderBy, deleteDoc, doc } from "firebase/firestore";
-import AppCircleLoading from '@/components/AppCircleLoading.vue';
+import CircleLoading from '@/components/CircleLoading.vue';
 import { mapGetters } from 'vuex';
 
 export default {
     name: 'AppHistory',
     components:{
-        'app-circle-loading':  AppCircleLoading,
+        'circle-loading':  CircleLoading,
     },
     data(){
         return{
@@ -98,6 +98,11 @@ export default {
         async getHistoryData(){
             if (this.$user){
                 this.loading=true;
+                this.selectedNums = [];
+                this.drawedNums = [];
+                this.moneyWon = [];
+                this.drawTime = [];
+                this.docsID = [];
                 try {
                     const q = query(collection(getFirestore(), "users", this.$user.uid,"history"),orderBy("drawTime", "desc"))
                     const userHistory = await getDocs(q);
@@ -112,6 +117,7 @@ export default {
                     console.error("Error adding document: ", e);
                 }finally{
                     this.loading=false;
+                    this.$store.commit('SET_UPDATEHISTORY',false)
                 }
                 this.selectedNums.length === 0 ? this.emptyHistory = true : this.emptyHistory = false
             }
@@ -123,7 +129,6 @@ export default {
     activated(){
         if (this.GET_UPDATE_HISTORY){
             this.getHistoryData()
-            this.$store.commit('SET_UPDATEHISTORY',false)
         }
     }
 }

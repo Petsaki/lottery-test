@@ -1,6 +1,5 @@
 <script>
 export default {
-    name: 'AppButton',
     props: {
         tagProp:{
             tag: String,

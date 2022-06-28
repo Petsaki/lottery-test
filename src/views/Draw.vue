@@ -10,7 +10,7 @@
                                 <!-- <button class="app-ball cursor-default">
                                     {{ num }}
                                 </button> -->
-                                <app-ball :numProp="num" />
+                                <base-ball :numProp="num" />
                             </div>
                         </div>
                     </div>
@@ -18,9 +18,9 @@
                         <span class="mb-2 font-semibold text-lg">Your Number:</span>
                         <div class="grid grid-rows-1 grid-cols-1 grid-flow-row gap-y-8 align-middle self-center justify-items-center text-lg font-semibold">
                             <div v-for="num in selectedNums" :key="num"  class="flex justify-center items-center">
-                                <app-ball :ref="`UserNums${num}`">
+                                <base-ball :ref="`UserNums${num}`">
                                     <span class="underline decoration-gray-900">{{ num }}</span>
-                                </app-ball>
+                                </base-ball>
                                 <!-- <button :ref="`UserNums${num}`" class="app-ball cursor-default disabled:shadow-3d-match disabled:sm:shadow-3d-match-sm group ">
                                     <span class="underline decoration-gray-900 group-disabled:animate-spin ">{{ num }}</span>
                                 </button> -->
@@ -31,21 +31,21 @@
                 <span class="my-2 font-semibold text-lg flex items-center justify-center">You have won: {{moneyWon}}</span>
             </div>
         </div>
-        <app-modal :showModal="showModal" :moneyWon="this.moneyWon" :drawTime="this.currentTime"/>
+        <the-modal :showModal="showModal" :moneyWon="this.moneyWon" :drawTime="this.currentTime"/>
     </div>
 </template>
 
 <script>
-import AppModal from '../components/AppModal.vue'
+import TheModal from '../components/TheModal.vue'
 import { setDoc, doc, getFirestore } from "firebase/firestore";
 import { mapGetters } from 'vuex';
-import AppBall from '@/components/AppBall.vue';
+import BaseBall from '@/components/BaseBall.vue';
 
 export default {
     name: 'AppDraw',
     components: {
-    'app-modal':  AppModal,
-    'app-ball':  AppBall,
+    'the-modal':  TheModal,
+    'base-ball':  BaseBall,
     },
     data() {
         return {

@@ -1,8 +1,8 @@
 <template>
   <div class="min-h-screen bg-svg-bg bg-fixed">
-    <app-header  v-if="this.$store.getters.IS_LOGGEDIN"/>
+    <the-header  v-if="this.$store.getters.IS_LOGGEDIN"/>
     <div v-show="GET_LOADING" class="flex justify-center items-center pt-20 ">
-      <app-circle-loading class="absolute top-[calc(50%-40px)] mx-auto"/>
+      <circle-loading class="absolute top-[calc(50%-40px)] mx-auto"/>
     </div>
      
     <!-- <router-view v-if="!GET_LOADING"/> -->
@@ -15,24 +15,24 @@
       </keep-alive>
     <!-- </transition> -->
 
-    <app-toast v-if="this.GET_TOAST_SHOW" :msg="this.GET_TOAST_MSG" :type="this.GET_TOAST_TYPE"/>
+    <the-toast v-if="this.GET_TOAST_SHOW" :msg="this.GET_TOAST_MSG" :type="this.GET_TOAST_TYPE"/>
   </div>
 </template>
 
 <script>
 
-import AppToast from './components/AppToast.vue'
+import TheToast from './components/TheToast.vue'
 import {mapGetters} from 'vuex'
-import AppHeader from './components/AppHeader.vue';
+import TheHeader from './components/TheHeader.vue';
 import { getAuth } from '@firebase/auth';
-import AppCircleLoading from './components/AppCircleLoading.vue';
+import CircleLoading from './components/CircleLoading.vue';
 
 export default {
   name: 'App',
   components: {
-    'app-toast':  AppToast,
-    'app-header':  AppHeader,
-    'app-circle-loading':  AppCircleLoading,
+    'the-toast':  TheToast,
+    'the-header':  TheHeader,
+    'circle-loading':  CircleLoading,
   },
   data(){
     return{

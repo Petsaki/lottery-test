@@ -11,7 +11,6 @@
 
 <script>
 export default {
-    name: 'AppToast',
     props:{
         type:String,
         msg:String,

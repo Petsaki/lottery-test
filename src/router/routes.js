@@ -5,12 +5,12 @@ import { getAuth } from "firebase/auth";
 
 Vue.use(Router)
 
-const AppMain = () => import('../views/AppMain.vue')
-const AppLogin = () => import('../views/AppLogin.vue')
-const AppSignup = () => import('../views/AppSignup.vue')
-const AppNotFound = () => import('../views/AppNotFound.vue')
-const AppDraw = () => import('../views/AppDraw.vue')
-const AppHistory = () => import('../views/AppHistory.vue')
+const Home = () => import('../views/Home.vue')
+const Login = () => import('../views/Login.vue')
+const Signup = () => import('../views/SignUp.vue')
+const NotFound = () => import('../views/NotFound.vue')
+const Draw = () => import('../views/Draw.vue')
+const History = () => import('../views/History.vue')
 const HistoryDetails = () => import('../views/HistoryDetails.vue')
 
 
@@ -27,13 +27,13 @@ const ProtectedDraw = (to,from, next) =>{
 const router = new Router({
   mode:"history",
   routes: [
-      {path:'/', component:AppMain,meta: {requiresAuth: true}},
-      {path:'/login', component:AppLogin,meta: {requiresAuth: false}},
-      {path:'/signUp', component:AppSignup,meta: {requiresAuth: false}},
-      {path:'/liveDraw', component:AppDraw,meta: {requiresAuth: true}, beforeEnter: ProtectedDraw},
-      {path:'/history', component:AppHistory,meta: {requiresAuth: true}},
+      {path:'/', component:Home,meta: {requiresAuth: true}},
+      {path:'/login', component:Login,meta: {requiresAuth: false}},
+      {path:'/signUp', component:Signup,meta: {requiresAuth: false}},
+      {path:'/liveDraw', component:Draw,meta: {requiresAuth: true}, beforeEnter: ProtectedDraw},
+      {path:'/history', component:History,meta: {requiresAuth: true}},
       {path:'/history/:id', component:HistoryDetails,meta: {requiresAuth: true}},
-      {path:'/*', component:AppNotFound},
+      {path:'/*', component:NotFound},
   ],
   // scrollBehavior() {
   //   return {

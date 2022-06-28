@@ -8,19 +8,19 @@
                 <ul class="flex gap-3 sm:gap-7 flex-wrap-reverse justify-end">
                     <div class="flex gap-3 justify-end sm:justify-center items-center flex-wrap">
                         <li >
-                            <app-button tagProp="router-link" toProp="/" class="bg-blue-700">Home</app-button>
+                            <base-button tagProp="router-link" toProp="/" class="bg-blue-700">Home</base-button>
                         </li>
                         <li>
-                            <app-button @click.native="goAtDraw" class="bg-blue-700">Live Draw</app-button>
+                            <base-button @click.native="goAtDraw" class="bg-blue-700">Live Draw</base-button>
                         </li>
                         <li>
-                            <app-button tagProp="router-link" toProp="/history" class="bg-blue-700">History</app-button>
+                            <base-button tagProp="router-link" toProp="/history" class="bg-blue-700">History</base-button>
                         </li>
                     </div>
                 
                     <div class="flex gap-2 justify-center items-center">
                         <img alt="User's Image" src="../assets/logo.png" tabindex="0" class="w-12 h-12 bg-center object-cover bg-no-repeat rounded-full border-dashed border"/>
-                         <app-button @click.native="logout" class="bg-red-600">Log Out</app-button>
+                         <base-button @click.native="logout" class="bg-red-600">Log Out</base-button>
                     </div>
                 </ul>
             </nav>
@@ -30,17 +30,18 @@
 
 <script>
 import { getAuth, signOut } from "firebase/auth";
-import AppButton from './AppButton.vue';
+import BaseButton from './BaseButton.vue';
 
 export default {
     components: {
-        'app-button':  AppButton,
+        'base-button':  BaseButton,
     },
     methods:{
         logout(){
             const auth = getAuth();
             signOut(auth).then(() => {
-                this.$router.push({ path: '/login' })  
+                this.$router.push({ path: '/login' })
+                this.$store.commit('SET_UPDATEHISTORY',true)  
             }).catch((error) => {
                 console.log(error)
             });

@@ -2,17 +2,17 @@
   <div class="min-h-screen flex justify-center items-center sm:items-start sm:pt-36" v-if="!this.$store.getters.IS_LOGGEDIN">
     <form @submit.prevent="login" class="flex flex-col h-fit justify-start items-center gap-5 bg-white px-5 sm:px-12 border-2 rounded-md border-black pt-5 pb-8">
         <img alt="Logo Image" src="../assets/logo.png" class="app-img-logo"/>
-          <app-input labelProp="Enter your email:">
+          <base-input labelProp="Enter your email:">
             <!-- Removed the v-model because i didnt really neeb the values to be up to date everytime but only when user submit :) -->
             <!-- <input type="email" required autofocus v-model="form.email" class="app-input"/> -->
             <input type="email" required autofocus name="email" class="app-input"/>
-          </app-input>
-          <app-input labelProp="Enter your password:">
+          </base-input>
+          <base-input labelProp="Enter your password:">
             <input type="password" required minlength="8" name="password" autocomplete="on" class="app-input"/>
-          </app-input>
+          </base-input>
           <div class="flex justify-between w-full text-white pt-3">
-            <app-button tagProp="input" typeProp="submit" valueProp="Log in" class="bg-blue-400"/>
-            <app-button tagProp="router-link" toProp="/signUp" class="bg-green-400">Sign up</app-button> 
+            <base-button tagProp="input" typeProp="submit" valueProp="Log in" class="bg-blue-400"/>
+            <base-button tagProp="router-link" toProp="/signUp" class="bg-green-400">Sign up</base-button> 
           </div>
           <div v-show="loading" class="app-loading-circle"></div>
     </form>
@@ -22,15 +22,15 @@
 <script>
 
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import AppButton from '@/components/AppButton.vue';
-import AppInput from '@/components/AppInput.vue';
+import BaseButton from '@/components/BaseButton.vue';
+import BaseInput from '@/components/BaseInput.vue';
 
 
 export default {
   name: 'AppLogin',
   components: {
-    'app-button':  AppButton,
-    'app-input':  AppInput,
+    'base-button':  BaseButton,
+    'base-input':  BaseInput,
   },
   data() {
     return {
